@@ -54,7 +54,7 @@ function setupPinGate() {
   const dots = document.querySelectorAll('.pin-dot');
   const keys = document.querySelectorAll('.pin-key-btn');
   const padlockWrapper = document.querySelector('.pin-padlock-wrapper');
-  const targetPin = CONFIG.pinGateConfig.pinCode || '1205';
+  const targetPin = CONFIG.pinGateConfig.pinCode || '2628';
 
   keys.forEach(keyBtn => {
     keyBtn.addEventListener('click', () => {
@@ -125,7 +125,7 @@ function setupWelcomeGate() {
     "/flowers/flower-3.png",
     "/flowers/flower-4.png"
   ];
-  const TOTAL_FLOWERS = 450; // Jumlah ditambah drastis agar galaksinya sangat padat
+  const TOTAL_FLOWERS = 370; // Dikurangi 80 (dari 450 menjadi 370)
 
   // Pre-create flower elements
   for (let i = 0; i < TOTAL_FLOWERS; i++) {

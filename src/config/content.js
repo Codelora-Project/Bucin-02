@@ -9,10 +9,10 @@
 export const CONFIG = {
   // 0. PASSCODE PIN GATE SCREEN
   pinGateConfig: {
-    pinCode: "1205",
+    pinCode: "2628",
     title: "For You, My Love",
     subtitle: "Enter our 4-digit secret code to unlock your birthday surprise",
-    hint: "Hint: Our special date (Default PIN: 1205)"
+    hint: "Hint: Our special date (Default PIN: 2628)"
   },
 
 
