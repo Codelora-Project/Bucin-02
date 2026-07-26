@@ -5,35 +5,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Color Palette - Soft Pastel Pink & Lavender */
-  --bg-deep-space: #FBEFEF;
-  --bg-purple-dark: #FFE2E2;
-  --bg-purple-mid: #FBEFEF;
-  --bg-purple-accent: #F5CBCB;
+  /* Color Palette - Romantic Pink & Lavender (Vivid Pastel) */
+  --bg-deep-space: #FBE8E8;
+  --bg-purple-dark: #F9D8D8;
+  --bg-purple-mid: #FBE8E8;
+  --bg-purple-accent: #EDA8A8;
   
-  /* Pastel Pink & Lavender Accent Tokens */
-  --rose-gold-primary: #C5B3D3;
-  --rose-gold-light: #9b87b0;
-  --rose-gold-bright: #b5a0c8;
-  --rose-gold-deep: #a08dbf;
-  --rose-gold-dark: #7a6595;
-  --rose-pink-soft: #F5CBCB;
-  --rose-gold-glow: rgba(197, 179, 211, 0.35);
-  --rose-gold-border: rgba(245, 203, 203, 0.55);
-  --rose-gold-border-hover: rgba(197, 179, 211, 0.7);
+  /* Pink & Lavender Accent Tokens - Deeper & More Saturated */
+  --rose-gold-primary: #A67BB5;   /* deep lavender */
+  --rose-gold-light: #7D5A95;     /* rich purple */
+  --rose-gold-bright: #C49ED4;    /* medium lavender */
+  --rose-gold-deep: #8F66A8;      /* deep violet-purple */
+  --rose-gold-dark: #5e3d75;
+  --rose-pink-soft: #E89898;      /* vivid salmon pink */
+  --rose-gold-glow: rgba(166, 123, 181, 0.4);
+  --rose-gold-border: rgba(232, 152, 152, 0.7);
+  --rose-gold-border-hover: rgba(166, 123, 181, 0.85);
 
-  /* Text Colors - Dark Mauve for readability on light backgrounds */
-  --text-main: #3d2a3a;
-  --text-muted: #7a5c73;
-  --text-subtle: #a88fa3;
-  --text-rose-gold: #8b6fa0;
+  /* Text Colors - Deep Mauve, High Contrast */
+  --text-main: #2e1a2e;
+  --text-muted: #6b4560;
+  --text-subtle: #9a7090;
+  --text-rose-gold: #7D5A95;
 
-  /* Glassmorphism Surface Tokens - Light Pink Translucent */
-  --glass-bg: rgba(255, 226, 226, 0.72);
-  --glass-bg-hover: rgba(251, 239, 239, 0.88);
+  /* Glassmorphism Surface Tokens - Richer opacity */
+  --glass-bg: rgba(249, 216, 216, 0.82);
+  --glass-bg-hover: rgba(251, 232, 232, 0.92);
   --glass-border: 1px solid var(--rose-gold-border);
   --glass-blur: blur(14px);
-  --glass-shadow: 0 8px 28px rgba(180, 120, 130, 0.15), 0 0 18px rgba(197, 179, 211, 0.12);
+  --glass-shadow: 0 8px 28px rgba(160, 90, 110, 0.22), 0 0 18px rgba(166, 123, 181, 0.18);
 
   /* Fonts */
   --font-serif: 'Cormorant Garamond', Georgia, serif;
@@ -68,10 +68,10 @@ html {
 body {
   min-height: 100vh;
   position: relative;
-  background: linear-gradient(160deg, #FBEFEF 0%, #FFE2E2 40%, #F5CBCB 75%, #e8d5f0 100%);
+  background: linear-gradient(160deg, #FBE8E8 0%, #F5CBCB 35%, #DDB8E8 75%, #C9A8DB 100%);
   background-attachment: fixed;
   line-height: 1.7;
-  font-size: 18px; /* Diperbesar dari 16px */
+  font-size: 18px;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -92,7 +92,7 @@ body {
   top: 0;
   left: 0;
   height: 4px;
-  background: linear-gradient(90deg, #F5CBCB 0%, #C5B3D3 100%);
+  background: linear-gradient(90deg, #E89898 0%, #A67BB5 100%);
   width: 0%;
   z-index: 10001; /* Above everything */
   transition: width 0.1s ease-out;
@@ -115,12 +115,12 @@ body {
   max-width: 900px;
   margin: 20px auto 0;
   padding: 12px 28px;
-  background: rgba(255, 240, 240, 0.8);
+  background: rgba(255, 228, 228, 0.9);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(245, 203, 203, 0.6);
+  border: 1px solid rgba(232, 152, 152, 0.7);
   border-radius: var(--radius-full);
-  box-shadow: 0 8px 30px rgba(180, 120, 130, 0.15);
+  box-shadow: 0 8px 30px rgba(160, 90, 110, 0.2);
 }
 
 .top-nav-brand {
@@ -166,10 +166,10 @@ body {
 
 .heading-rose-gold {
   font-family: var(--font-serif);
-  background: linear-gradient(135deg, #F5CBCB 0%, #C5B3D3 50%, #a08dbf 100%);
+  background: linear-gradient(135deg, #E89898 0%, #A67BB5 50%, #7D5A95 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 30px rgba(197, 179, 211, 0.2);
+  text-shadow: 0 0 30px rgba(166, 123, 181, 0.25);
 }
 
 .section-container {
@@ -210,12 +210,12 @@ body {
   align-items: center;
   gap: 12px;
   padding: 10px 22px;
-  background: rgba(255, 240, 240, 0.85);
+  background: rgba(255, 224, 224, 0.9);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(245, 203, 203, 0.6);
+  border: 1px solid rgba(232, 152, 152, 0.65);
   border-radius: var(--radius-full);
   margin-bottom: 24px;
-  box-shadow: 0 8px 24px rgba(180, 120, 130, 0.15);
+  box-shadow: 0 8px 24px rgba(160, 90, 110, 0.18);
 }
 
 .hero-days-icon {
@@ -396,9 +396,9 @@ body {
   width: 44%;
   padding: 24px;
   border-radius: var(--radius-md);
-  background: rgba(255, 242, 242, 0.88);
+  background: rgba(255, 228, 230, 0.93);
   backdrop-filter: blur(14px);
-  border: 1px solid rgba(245, 203, 203, 0.6);
+  border: 1px solid rgba(232, 152, 152, 0.65);
   box-shadow: var(--glass-shadow);
   transition: all 0.3s ease;
 }
@@ -464,8 +464,8 @@ body {
 }
 
 .shake-jar-btn {
-  background: linear-gradient(135deg, #F5CBCB 0%, #C5B3D3 100%);
-  color: #3d2a3a;
+  background: linear-gradient(135deg, #E89898 0%, #A67BB5 100%);
+  color: #2e1a2e;
   border: none;
   padding: 14px 32px;
   font-size: 1rem;
@@ -475,22 +475,22 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 8px 25px rgba(197, 179, 211, 0.4);
+  box-shadow: 0 8px 25px rgba(166, 123, 181, 0.45);
   transition: all 0.3s ease;
 }
 
 .shake-jar-btn:hover {
   transform: scale(1.05);
-  box-shadow: 0 12px 30px rgba(197, 179, 211, 0.55);
+  box-shadow: 0 12px 30px rgba(166, 123, 181, 0.65);
 }
 
 .jar-note-modal {
   margin-top: 28px;
   padding: 24px;
   border-radius: var(--radius-md);
-  background: rgba(255, 240, 248, 0.95);
+  background: rgba(255, 235, 245, 0.97);
   border: 1px solid var(--rose-gold-primary);
-  box-shadow: 0 15px 40px rgba(180, 120, 130, 0.2), 0 0 25px rgba(197, 179, 211, 0.3);
+  box-shadow: 0 15px 40px rgba(160, 90, 110, 0.25), 0 0 25px rgba(166, 123, 181, 0.35);
   opacity: 0;
   transform: scale(0.9);
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);

@@ -8,16 +8,16 @@
   bottom: 24px;
   right: 24px;
   z-index: 9000;
-  background: rgba(255, 245, 248, 0.9);
+  background: rgba(255, 228, 232, 0.95);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(245, 203, 203, 0.65);
+  border: 1px solid rgba(232, 152, 152, 0.75);
   border-radius: var(--radius-full);
   padding: 8px 16px 8px 12px;
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: 0 10px 30px rgba(180, 120, 130, 0.2), 0 0 20px rgba(197, 179, 211, 0.2);
+  box-shadow: 0 10px 30px rgba(160, 90, 110, 0.28), 0 0 20px rgba(166, 123, 181, 0.25);
   transition: all 0.3s ease;
   opacity: 0;
   transform: translateY(20px);
@@ -36,17 +36,17 @@
 }
 
 .audio-toggle-btn {
-  background: linear-gradient(135deg, #F5CBCB 0%, #C5B3D3 100%);
+  background: linear-gradient(135deg, #E89898 0%, #A67BB5 100%);
   border: none;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  color: #3d2a3a;
+  color: #2e1a2e;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(197, 179, 211, 0.45);
+  box-shadow: 0 4px 14px rgba(166, 123, 181, 0.55);
   transition: transform 0.2s ease, background 0.3s ease;
 }
 
@@ -140,9 +140,9 @@
 .playlist-card {
   padding: 32px 28px;
   border-radius: var(--radius-lg);
-  background: rgba(255, 245, 248, 0.9);
+  background: rgba(255, 228, 232, 0.92);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(245, 203, 203, 0.6);
+  border: 1px solid rgba(232, 152, 152, 0.7);
   box-shadow: var(--glass-shadow);
 }
 
@@ -152,22 +152,22 @@
   justify-content: space-between;
   padding: 14px 18px;
   border-radius: var(--radius-md);
-  background: rgba(255, 240, 243, 0.7);
-  border: 1px solid rgba(245, 203, 203, 0.45);
+  background: rgba(255, 215, 220, 0.75);
+  border: 1px solid rgba(232, 152, 152, 0.55);
   margin-bottom: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .playlist-track-item:hover {
-  background: rgba(255, 230, 238, 0.9);
-  border-color: rgba(197, 179, 211, 0.55);
+  background: rgba(240, 200, 218, 0.92);
+  border-color: rgba(166, 123, 181, 0.65);
 }
 
 .playlist-track-item.is-active {
-  background: linear-gradient(135deg, rgba(245, 203, 203, 0.55) 0%, rgba(197, 179, 211, 0.45) 100%);
+  background: linear-gradient(135deg, rgba(232, 152, 152, 0.45) 0%, rgba(166, 123, 181, 0.38) 100%);
   border-color: var(--rose-gold-primary);
-  box-shadow: 0 4px 18px rgba(197, 179, 211, 0.25);
+  box-shadow: 0 4px 18px rgba(166, 123, 181, 0.35);
 }
 
 .playlist-track-info {

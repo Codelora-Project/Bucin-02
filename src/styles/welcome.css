@@ -6,7 +6,7 @@
   position: fixed;
   inset: 0;
   z-index: 9998;
-  background: linear-gradient(160deg, #FBEFEF 0%, #FFE2E2 55%, #F5CBCB 100%);
+  background: linear-gradient(160deg, #FBE8E8 0%, #F5CBCB 40%, #DDB8E8 75%, #C9A8DB 100%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -87,14 +87,14 @@
 #greeting-card {
   position: relative;
   z-index: 100;
-  background: rgba(255, 245, 248, 0.92);
+  background: rgba(255, 235, 240, 0.96);
   padding: 3rem 2.5rem;
   border-radius: var(--radius-lg);
   max-width: 90%;
   width: 480px;
   text-align: center;
-  box-shadow: 0 20px 50px rgba(180, 120, 130, 0.2), 0 0 30px rgba(197, 179, 211, 0.2);
-  border: 1px solid rgba(245, 203, 203, 0.65);
+  box-shadow: 0 20px 50px rgba(160, 90, 110, 0.28), 0 0 30px rgba(166, 123, 181, 0.25);
+  border: 1px solid rgba(232, 152, 152, 0.75);
   backdrop-filter: blur(15px);
   
   /* Hidden initially for GSAP to animate */
@@ -134,8 +134,8 @@
 .welcome-continue-btn {
   display: inline-block;
   padding: 12px 24px;
-  background: linear-gradient(135deg, #F5CBCB 0%, #C5B3D3 100%);
-  color: #3d2a3a;
+  background: linear-gradient(135deg, #E89898 0%, #A67BB5 100%);
+  color: #2e1a2e;
   border: none;
   border-radius: 30px;
   font-size: 0.95rem;
@@ -143,7 +143,7 @@
   letter-spacing: 1px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(197, 179, 211, 0.4);
+  box-shadow: 0 4px 15px rgba(166, 123, 181, 0.5);
 }
 
 .welcome-continue-btn:hover {
