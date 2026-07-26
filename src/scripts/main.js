@@ -149,10 +149,8 @@ function setupWelcomeGate() {
     flower.style.backgroundRepeat = "no-repeat";
     flower.style.backgroundPosition = "center";
     
-    // Ukuran disesuaikan agar pas dan tidak terlalu menutupi berlebihan di mobile
-    const minSize = isMobile ? 35 : 55;
-    const extraSize = isMobile ? 40 : 55;
-    const randomSize = Math.random() * extraSize + minSize;
+    // Ukuran bunga disetting persis 75px - 190px
+    const randomSize = Math.random() * 115 + 75;
     flower.style.width = randomSize + "px";
     flower.style.height = randomSize + "px";
     
