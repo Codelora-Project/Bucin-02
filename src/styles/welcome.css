@@ -1,12 +1,12 @@
 /* ==========================================================================
-   WELCOME GATE STYLES (Flower Explosion GSAP)
+   WELCOME GATE STYLES (Flower Explosion GSAP) - Pastel Pink Theme
    ========================================================================== */
 
 .welcome-gate-overlay {
   position: fixed;
   inset: 0;
   z-index: 9998;
-  background-color: var(--bg-dark);
+  background: linear-gradient(160deg, #FBEFEF 0%, #FFE2E2 55%, #F5CBCB 100%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -36,7 +36,7 @@
 .gift-icon {
   font-size: 5rem;
   margin-bottom: 1rem;
-  filter: drop-shadow(0 0 20px rgba(224, 169, 109, 0.4));
+  filter: drop-shadow(0 0 20px rgba(197, 179, 211, 0.5));
   transition: transform 0.3s ease;
 }
 
@@ -49,7 +49,7 @@
   font-size: 1.5rem;
   letter-spacing: 2px;
   margin-bottom: 0.5rem;
-  color: var(--rose-gold-primary);
+  color: #8b6fa0;
 }
 
 .tap-hint {
@@ -57,6 +57,7 @@
   font-weight: 300;
   letter-spacing: 3px;
   opacity: 0.7;
+  color: #7a5c73;
   animation: pulse 2s infinite ease-in-out;
 }
 
@@ -86,14 +87,14 @@
 #greeting-card {
   position: relative;
   z-index: 100;
-  background: rgba(28, 14, 48, 0.8);
+  background: rgba(255, 245, 248, 0.92);
   padding: 3rem 2.5rem;
   border-radius: var(--radius-lg);
   max-width: 90%;
   width: 480px;
   text-align: center;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(224, 169, 109, 0.1);
-  border: 1px solid var(--rose-gold-border);
+  box-shadow: 0 20px 50px rgba(180, 120, 130, 0.2), 0 0 30px rgba(197, 179, 211, 0.2);
+  border: 1px solid rgba(245, 203, 203, 0.65);
   backdrop-filter: blur(15px);
   
   /* Hidden initially for GSAP to animate */
@@ -114,7 +115,7 @@
 .card-title {
   font-family: 'Playfair Display', serif;
   font-size: 2.2rem;
-  color: var(--rose-gold-light);
+  color: #8b6fa0;
   line-height: 1.3;
   margin-bottom: 1.5rem;
   font-weight: 600;
@@ -133,8 +134,8 @@
 .welcome-continue-btn {
   display: inline-block;
   padding: 12px 24px;
-  background: linear-gradient(135deg, var(--rose-gold-primary) 0%, #b87333 100%);
-  color: #12091f;
+  background: linear-gradient(135deg, #F5CBCB 0%, #C5B3D3 100%);
+  color: #3d2a3a;
   border: none;
   border-radius: 30px;
   font-size: 0.95rem;
@@ -142,12 +143,12 @@
   letter-spacing: 1px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(224, 169, 109, 0.3);
+  box-shadow: 0 4px 15px rgba(197, 179, 211, 0.4);
 }
 
 .welcome-continue-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(224, 169, 109, 0.4);
+  box-shadow: 0 6px 20px rgba(197, 179, 211, 0.55);
 }
 
 /* Responsive scaling for mobile */
