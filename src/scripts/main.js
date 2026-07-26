@@ -56,24 +56,34 @@ function setupPinGate() {
   const padlockWrapper = document.querySelector('.pin-padlock-wrapper');
   const targetPin = CONFIG.pinGateConfig.pinCode || '2628';
 
-  keys.forEach(keyBtn => {
-    keyBtn.addEventListener('click', () => {
-      const key = keyBtn.dataset.key;
+  const handleKeyPress = (key) => {
+    if (key === 'clear') {
+      currentPinInput = '';
+      updatePinDots(currentPinInput.length, dots);
+    } else if (key === 'submit') {
+      verifyPin();
+    } else if (currentPinInput.length < 4) {
+      currentPinInput += key;
+      updatePinDots(currentPinInput.length, dots);
 
-      if (key === 'clear') {
-        currentPinInput = '';
-        updatePinDots(currentPinInput.length, dots);
-      } else if (key === 'submit') {
-        verifyPin();
-      } else if (currentPinInput.length < 4) {
-        currentPinInput += key;
-        updatePinDots(currentPinInput.length, dots);
-
-        if (currentPinInput.length === 4) {
-          setTimeout(verifyPin, 180);
-        }
+      if (currentPinInput.length === 4) {
+        setTimeout(verifyPin, 120);
       }
-    });
+    }
+  };
+
+  keys.forEach(keyBtn => {
+    // Fast response on touch/mouse without 300ms delay
+    const handlePress = (e) => {
+      e.preventDefault();
+      keyBtn.classList.add('is-pressed');
+      setTimeout(() => keyBtn.classList.remove('is-pressed'), 120);
+      
+      const key = keyBtn.dataset.key;
+      handleKeyPress(key);
+    };
+
+    keyBtn.addEventListener('pointerdown', handlePress);
   });
 
   function verifyPin() {
@@ -125,7 +135,8 @@ function setupWelcomeGate() {
     "/flowers/flower-3.png",
     "/flowers/flower-4.png"
   ];
-  const TOTAL_FLOWERS = 370; // Dikurangi 80 (dari 450 menjadi 370)
+  const isMobile = window.innerWidth <= 600;
+  const TOTAL_FLOWERS = isMobile ? 120 : 180; // Dikurangi signifikan agar HP tidak lag dan animasi lancar
 
   // Pre-create flower elements
   for (let i = 0; i < TOTAL_FLOWERS; i++) {
@@ -138,8 +149,10 @@ function setupWelcomeGate() {
     flower.style.backgroundRepeat = "no-repeat";
     flower.style.backgroundPosition = "center";
     
-    // Ukuran diperbesar drastis (100px - 250px) agar saling menimpa
-    const randomSize = Math.random() * 150 + 100;
+    // Ukuran disesuaikan agar pas dan tidak terlalu menutupi berlebihan di mobile
+    const minSize = isMobile ? 35 : 55;
+    const extraSize = isMobile ? 40 : 55;
+    const randomSize = Math.random() * extraSize + minSize;
     flower.style.width = randomSize + "px";
     flower.style.height = randomSize + "px";
     
