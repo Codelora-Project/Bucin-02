@@ -1,0 +1,189 @@
+/* ====================================================================
+   LOVE ENVELOPE / ROMANTIC NOTE DECK STYLING (RESPONSIVE)
+   ==================================================================== */
+
+.love-envelope-deck {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 28px 24px;
+  margin-top: 48px;
+  padding: 8px;
+}
+
+/* Love Envelope Card */
+.envelope-card {
+  position: relative;
+  background: linear-gradient(145deg, rgba(32, 16, 56, 0.88) 0%, rgba(18, 9, 34, 0.95) 100%);
+  border: 1px solid rgba(224, 169, 109, 0.3);
+  border-radius: 20px;
+  padding: 24px 22px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), 0 0 15px rgba(224, 169, 109, 0.08);
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.35, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+  overflow: hidden;
+}
+
+/* Staggered organic offsets on desktop */
+.envelope-card.offset-up {
+  transform: translateY(-8px);
+}
+.envelope-card.offset-down {
+  transform: translateY(12px);
+}
+
+.envelope-card:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  border-color: var(--rose-gold-primary);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7), 0 0 28px rgba(224, 169, 109, 0.25);
+}
+
+/* Top Envelope Flap Decor */
+.envelope-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, var(--rose-gold-primary), transparent);
+  opacity: 0.6;
+}
+
+/* Envelope Header */
+.envelope-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Metallic Wax Seal Badge */
+.envelope-seal {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #f5d5b3 0%, #b87333 60%, #66350c 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #120924;
+  font-family: var(--font-cursive);
+  font-size: 1.7rem;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(184, 115, 51, 0.45);
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.envelope-card:hover .envelope-seal {
+  transform: scale(1.08) rotate(5deg);
+}
+
+.envelope-title-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.envelope-number {
+  font-size: 0.75rem;
+  color: var(--rose-gold-light);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.envelope-title {
+  font-family: var(--font-serif);
+  font-size: 1.6rem; /* Diperbesar */
+  color: var(--text-main);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+/* Closed State Hint */
+.envelope-closed-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--rose-gold-primary);
+  margin-top: 16px;
+  opacity: 0.85;
+  transition: opacity 0.3s ease;
+}
+
+.envelope-closed-hint svg {
+  transition: transform 0.3s ease;
+}
+
+.envelope-card:hover .envelope-closed-hint svg {
+  transform: translateX(4px);
+}
+
+/* Smooth Secret Letter Unfold (is-open) */
+.envelope-letter-wrapper {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.6s cubic-bezier(0.25, 1, 0.35, 1), opacity 0.5s ease, margin-top 0.4s ease;
+  margin-top: 0;
+  border-top: 1px dashed rgba(224, 169, 109, 0);
+}
+
+.envelope-card.is-open {
+  border-color: var(--rose-gold-primary);
+  background: linear-gradient(145deg, rgba(42, 20, 72, 0.95) 0%, rgba(24, 11, 44, 0.96) 100%);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7), 0 0 30px rgba(224, 169, 109, 0.28);
+}
+
+.envelope-card.is-open .envelope-closed-hint {
+  display: none;
+}
+
+.envelope-card.is-open .envelope-letter-wrapper {
+  max-height: 400px; /* Diperbesar untuk menampung teks yang lebih besar */
+  opacity: 1;
+  margin-top: 16px;
+  border-top-color: rgba(224, 169, 109, 0.3);
+  padding-top: 14px;
+}
+
+.envelope-letter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--rose-gold-light);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.envelope-letter-text {
+  font-family: var(--font-serif);
+  font-size: 1.35rem; /* Diperbesar drastis */
+  line-height: 1.65;
+  color: var(--text-main);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 650px) {
+  .love-envelope-deck {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .envelope-card.offset-up,
+  .envelope-card.offset-down {
+    transform: none;
+  }
+  .envelope-card {
+    padding: 20px 18px;
+  }
+  .envelope-title {
+    font-size: 1.4rem;
+  }
+  .envelope-seal {
+    width: 42px;
+    height: 42px;
+    font-size: 1.4rem;
+  }
+}

@@ -1,0 +1,291 @@
+/* ====================================================================
+   SPECIAL PLAYLIST / MUSIC PLAYER STYLING (GLASSMORPHISM)
+   ==================================================================== */
+
+.playlist-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Main Music Player Card */
+.music-player-card {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(48, 22, 60, 0.45);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(224, 169, 109, 0.25);
+  border-radius: 28px;
+  padding: 36px 36px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(224, 169, 109, 0.05);
+  margin-bottom: 20px;
+  text-align: center;
+  transition: all 0.4s ease;
+}
+
+/* Vinyl / CD Spinning Graphic */
+.player-artwork-wrapper {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 24px;
+}
+
+.player-vinyl-disc {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, #111 0%, #2b1130 30%, #1a0a20 60%, #111 100%);
+  border: 2px solid rgba(224, 169, 109, 0.4);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  animation: spin 8s linear infinite;
+  animation-play-state: paused;
+}
+
+.player-vinyl-disc.is-playing {
+  animation-play-state: running;
+}
+
+/* Vinyl grooves */
+.player-vinyl-disc::before {
+  content: '';
+  position: absolute;
+  inset: 15px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 10px rgba(0,0,0,0), inset 0 0 0 11px rgba(255,255,255,0.05),
+              inset 0 0 0 20px rgba(0,0,0,0), inset 0 0 0 21px rgba(255,255,255,0.05);
+}
+
+.player-vinyl-center {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #f5d5b3 0%, #b87333 60%, #66350c 100%);
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.player-vinyl-center::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #111;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.8);
+}
+
+/* Track Info */
+.player-track-info {
+  margin-bottom: 24px;
+}
+
+.player-title {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  color: var(--text-main);
+  margin-bottom: 6px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.player-artist {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+/* Progress Bar */
+.player-progress-container {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.player-time {
+  font-size: 0.8rem;
+  color: var(--rose-gold-light);
+  min-width: 38px;
+  opacity: 0.85;
+}
+
+.player-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+}
+
+.player-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--rose-gold-primary) 0%, var(--rose-gold-light) 100%);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.player-progress-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  left: 0%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--rose-gold-light);
+  box-shadow: 0 0 10px rgba(224, 169, 109, 0.6);
+  pointer-events: none;
+}
+
+/* Controls */
+.player-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+}
+
+.player-btn {
+  background: transparent;
+  border: none;
+  color: var(--rose-gold-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.player-btn:hover {
+  color: var(--rose-gold-light);
+  transform: scale(1.15);
+}
+
+.player-btn-play {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(224, 169, 109, 0.15);
+  border: 1px solid var(--rose-gold-border);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+.player-btn-play:hover {
+  background: rgba(224, 169, 109, 0.28);
+  transform: scale(1.08);
+}
+
+/* Track List */
+.playlist-tracks {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.playlist-track-item {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  padding: 16px 22px;
+  background: rgba(32, 16, 56, 0.5);
+  border: 1px solid rgba(224, 169, 109, 0.18);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.playlist-track-item:hover {
+  background: rgba(48, 22, 60, 0.65);
+  border-color: rgba(224, 169, 109, 0.35);
+  transform: translateY(-2px);
+}
+
+.playlist-track-item.is-active {
+  background: rgba(224, 169, 109, 0.12);
+  border-color: var(--rose-gold-primary);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(224, 169, 109, 0.15);
+}
+
+.playlist-track-number {
+  font-size: 0.9rem;
+  color: var(--rose-gold-light);
+  width: 28px;
+  opacity: 0.75;
+}
+
+.playlist-track-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.playlist-track-title {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+
+.playlist-track-artist {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.playlist-play-icon {
+  color: var(--rose-gold-primary);
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.playlist-track-item.is-active .playlist-play-icon {
+  opacity: 1;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 600px) {
+  .music-player-card {
+    padding: 28px 20px;
+  }
+  .player-artwork-wrapper {
+    width: 130px;
+    height: 130px;
+  }
+  .player-title {
+    font-size: 1.5rem;
+  }
+  .player-btn-play {
+    width: 50px;
+    height: 50px;
+  }
+}
+

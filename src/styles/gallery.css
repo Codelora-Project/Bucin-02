@@ -1,0 +1,229 @@
+/* ====================================================================
+   CLASSIC CREAM POLAROID SCRAPBOOK GALLERY STYLING (COMPACT ELEGANT)
+   ==================================================================== */
+
+.gallery-scrapbook-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Diperlebar */
+  gap: 32px 24px;
+  margin: 36px auto 0;
+  max-width: 900px;
+  padding: 10px;
+}
+
+/* Classic Cream Polaroid Snapshot Frame (Compact Proportions) */
+.polaroid-card {
+  position: relative;
+  max-width: 280px; /* Diperbesar agar foto dan teks lebih jelas */
+  width: 100%;
+  margin: 0 auto;
+  background: linear-gradient(180deg, #fffdf8 0%, #f7f1e5 100%);
+  border: 1px solid rgba(240, 225, 205, 0.85);
+  padding: 12px 12px 20px 12px;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.35, 1), box-shadow 0.4s ease;
+  transform-origin: center center;
+}
+
+/* Alternating Organic Skew / Tilts */
+.polaroid-card.tilt-left-1 { transform: rotate(-3.2deg) translateY(0); }
+.polaroid-card.tilt-right-1 { transform: rotate(2.5deg) translateY(6px); }
+.polaroid-card.tilt-left-2 { transform: rotate(-2.2deg) translateY(-4px); }
+.polaroid-card.tilt-right-2 { transform: rotate(3.2deg) translateY(6px); }
+
+/* Washi Masking Tape Sticker on Top Center */
+.polaroid-card::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  width: 64px;
+  height: 18px;
+  background: rgba(240, 225, 195, 0.85);
+  border: 1px solid rgba(215, 195, 160, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 3;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.polaroid-card:hover {
+  transform: rotate(0deg) scale(1.05) translateY(-8px) !important;
+  z-index: 10;
+  box-shadow: 0 20px 42px rgba(0, 0, 0, 0.65), 0 0 22px rgba(245, 213, 179, 0.35);
+}
+
+/* Image Container Inside Cream Polaroid */
+.polaroid-img-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: #111;
+}
+
+.polaroid-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.6s var(--ease-romantic);
+}
+
+.polaroid-card:hover .polaroid-img {
+  transform: scale(1.06);
+}
+
+/* Authentic Handwritten Footer Text */
+.polaroid-footer {
+  margin-top: 10px;
+  text-align: center;
+  padding: 0 2px;
+}
+
+.polaroid-date {
+  display: block;
+  font-size: 0.7rem;
+  color: #8c6b73;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.polaroid-title {
+  font-family: var(--font-handwritten);
+  font-size: 1.8rem; /* Diperbesar */
+  color: #3b232a;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.polaroid-caption-preview {
+  font-size: 0.95rem; /* Diperbesar */
+  color: #6b4d54;
+  font-style: italic;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Lightbox Modal */
+.lightbox-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(7, 3, 15, 0.92);
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.lightbox-modal.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox-content {
+  max-width: 840px;
+  width: 100%;
+  background: var(--bg-purple-dark);
+  border: 1px solid var(--rose-gold-primary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), 0 0 40px rgba(224, 169, 109, 0.2);
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+}
+
+.lightbox-img-wrapper {
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 550px;
+  overflow: hidden;
+}
+
+.lightbox-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.lightbox-info {
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.lightbox-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(224, 169, 109, 0.15);
+  border: 1px solid var(--rose-gold-border);
+  color: var(--rose-gold-light);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.lightbox-close-btn:hover {
+  background: var(--rose-gold-primary);
+  color: #120924;
+}
+
+/* Organic Responsive Sizing (Compact Polaroid Prints) */
+@media (max-width: 768px) {
+  .gallery-scrapbook-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 14px;
+    padding: 8px;
+  }
+  .polaroid-card {
+    max-width: 100%;
+    padding: 10px 10px 16px 10px;
+  }
+  .polaroid-title {
+    font-size: 1.5rem;
+  }
+  .lightbox-content {
+    grid-template-columns: 1fr;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .lightbox-img-wrapper {
+    max-height: 320px;
+  }
+}
+
+@media (max-width: 440px) {
+  .gallery-scrapbook-container {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .polaroid-card {
+    max-width: 230px;
+  }
+  .polaroid-card.tilt-left-1 { transform: rotate(-2.2deg); }
+  .polaroid-card.tilt-right-1 { transform: rotate(2deg); }
+  .polaroid-card.tilt-left-2 { transform: rotate(-1.5deg); }
+  .polaroid-card.tilt-right-2 { transform: rotate(2.5deg); }
+}

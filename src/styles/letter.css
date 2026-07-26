@@ -1,0 +1,144 @@
+/* ====================================================================
+   LOVE LETTER SECTION STYLING (PARCHMENT SCRAPBOOK STYLE)
+   ==================================================================== */
+
+.letter-paper-wrapper {
+  max-width: 820px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.letter-paper {
+  background: linear-gradient(145deg, rgba(28, 15, 48, 0.92) 0%, rgba(18, 9, 33, 0.96) 100%);
+  border: 1px solid rgba(224, 169, 109, 0.35);
+  border-radius: 24px;
+  padding: 64px 56px;
+  position: relative;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.65), inset 0 0 70px rgba(224, 169, 109, 0.05);
+  backdrop-filter: blur(18px);
+  overflow: hidden;
+}
+
+/* Left Decorative Ribbon Accent Line */
+.letter-paper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 28px;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, var(--rose-gold-primary) 30%, var(--rose-gold-deep) 70%, transparent);
+  opacity: 0.4;
+}
+
+/* Metallic Top Right Corner Seal Accent */
+.letter-wax-seal-badge {
+  position: absolute;
+  top: 36px;
+  right: 44px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #f5d5b3 0%, #b87333 60%, #66350c 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(184, 115, 51, 0.45), inset 0 -2px 6px rgba(0, 0, 0, 0.6);
+  color: #120924;
+  font-size: 1.5rem;
+  z-index: 5;
+}
+
+.letter-header {
+  text-align: left;
+  margin-bottom: 40px;
+  padding-left: 24px;
+  position: relative;
+}
+
+.letter-salutation {
+  font-family: var(--font-cursive);
+  font-size: 3.4rem; /* Diperbesar */
+  color: var(--rose-gold-light);
+  margin-bottom: 12px;
+}
+
+.letter-body {
+  font-family: var(--font-serif);
+  font-size: 1.6rem; /* Diperbesar drastis agar nyaman dibaca */
+  line-height: 1.95;
+  color: var(--text-main);
+  padding-left: 24px;
+}
+
+/* Progressive Scroll Reveal Paragraphs */
+.letter-paragraph {
+  margin-bottom: 28px;
+  opacity: 0;
+  transform: translateY(25px);
+  transition: opacity 1s cubic-bezier(0.25, 1, 0.35, 1), transform 1s cubic-bezier(0.25, 1, 0.35, 1);
+}
+
+.letter-paragraph.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.letter-paragraph::first-letter {
+  font-size: 3.4rem; /* Diperbesar */
+  font-family: var(--font-serif);
+  color: var(--rose-gold-primary);
+  float: left;
+  line-height: 0.9;
+  padding-right: 12px;
+  font-weight: 700;
+}
+
+.letter-footer {
+  margin-top: 48px;
+  text-align: right;
+  border-top: 1px solid rgba(224, 169, 109, 0.18);
+  padding-top: 28px;
+  padding-left: 24px;
+}
+
+.letter-closing-text {
+  font-style: italic;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+.letter-signature {
+  font-family: var(--font-cursive);
+  font-size: 3.4rem; /* Diperbesar */
+  color: var(--rose-gold-primary);
+  margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+  .letter-paper {
+    padding: 44px 24px;
+  }
+  .letter-paper::before {
+    left: 12px;
+  }
+  .letter-header,
+  .letter-body,
+  .letter-footer {
+    padding-left: 8px;
+  }
+  .letter-wax-seal-badge {
+    top: 24px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    font-size: 1.2rem;
+  }
+  .letter-salutation {
+    font-size: 2.6rem;
+  }
+  .letter-body {
+    font-size: 1.25rem;
+    line-height: 1.8;
+  }
+}
