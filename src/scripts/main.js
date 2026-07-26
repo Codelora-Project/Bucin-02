@@ -136,7 +136,7 @@ function setupWelcomeGate() {
     "/flowers/flower-4.png"
   ];
   const isMobile = window.innerWidth <= 600;
-  const TOTAL_FLOWERS = isMobile ? 120 : 180; // Dikurangi signifikan agar HP tidak lag dan animasi lancar
+  const TOTAL_FLOWERS = isMobile ? 180 : 340; // Dikurangi signifikan agar HP tidak lag dan animasi lancar
 
   // Pre-create flower elements
   for (let i = 0; i < TOTAL_FLOWERS; i++) {
