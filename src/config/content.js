@@ -173,7 +173,7 @@ export const CONFIG = {
   loveLetter: {
     title: "A Letter For You",
     subtitle: "On Your Birthday",
-    salutation: "Dearest Citra Mutia,",
+    salutation: "Dearest Adinda,",
     paragraphs: [
       "Happy birthday! I wanted to put together something truly personal for you today to celebrate the person you are.",
       
@@ -261,7 +261,7 @@ export const CONFIG = {
 
   // 8. CLOSING SECTION & WISHES
   pesanPenutup: {
-    title: "Happy Birthday, Citra Mutia!",
+    title: "Happy Birthday, Adinda!",
     message: "I hope today brings you as much happiness as you bring into my life every day. Loving you today, tomorrow, and always.",
     subtext: "Tap the button below to send a warm hug!",
     tombolPelukText: "Send Hugs & Love"

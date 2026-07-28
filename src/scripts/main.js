@@ -136,7 +136,7 @@ function setupWelcomeGate() {
     "/flowers/flower-4.png"
   ];
   const isMobile = window.innerWidth <= 600;
-  const TOTAL_FLOWERS = isMobile ? 180 : 340; // Dikurangi signifikan agar HP tidak lag dan animasi lancar
+  const TOTAL_FLOWERS = isMobile ? 180 : 440; // Dikurangi signifikan agar HP tidak lag dan animasi lancar
 
   // Pre-create flower elements
   for (let i = 0; i < TOTAL_FLOWERS; i++) {
@@ -165,48 +165,48 @@ function setupWelcomeGate() {
     if (isAnimating) return;
     isAnimating = true;
 
+    // Hilangkan background overlay welcome-gate LANGSUNG agar latar website utama & canvas langsung tampil 100%
+    welcomeGate.style.background = "transparent";
+    welcomeGate.style.backgroundColor = "transparent";
+    welcomeGate.style.zIndex = '5';
+    welcomeGate.style.pointerEvents = "none";
+
+    // Tampilkan konten utama LANGSUNG dan tempatkan di Layer Depan (z-index: 20)
+    const mainContent = document.getElementById('main-content');
+    const appContainer = document.querySelector('.app-container');
+    if (mainContent) mainContent.style.display = 'block';
+    if (appContainer) {
+      appContainer.style.position = 'relative';
+      appContainer.style.zIndex = '20';
+    }
+    
+    // Putar audio & tampilkan widget musik langsung
+    if (audioCtrl) {
+      audioCtrl.showWidget();
+      audioCtrl.play();
+    }
+    initScrollReveal();
+
     // Check if gsap is loaded
     if (typeof gsap === 'undefined') {
-      console.error("GSAP is not loaded!");
       showMainContent();
       return;
     }
 
     const tl = gsap.timeline();
 
-    // A. Fade out initial view and reveal main content behind the flowers
+    // Fade out initial view (kado)
     tl.to(initialView, {
       opacity: 0,
       scale: 0.8,
-      duration: 0.5,
+      duration: 0.3,
       ease: "power2.inOut",
       onComplete: () => {
         initialView.style.display = "none";
-        
-        // Mulai tampilkan konten utama di belakangnya
-        const mainContent = document.getElementById('main-content');
-        if (mainContent) mainContent.style.display = 'block';
-        
-        // Putar audio & setup scroll
-        if (audioCtrl) {
-          audioCtrl.showWidget();
-          audioCtrl.play();
-        }
-        setTimeout(() => { initScrollReveal(); }, 300);
-
-        // Pudar background welcome-gate menjadi transparan agar website utama terlihat
-        gsap.to(welcomeGate, {
-          backgroundColor: "rgba(0,0,0,0)",
-          duration: 1.5,
-          ease: "power1.inOut"
-        });
-        
-        // Biarkan kita bisa klik ke website utama selagi bunga berjatuhan (pointer-events: none)
-        welcomeGate.style.pointerEvents = "none";
       }
     });
 
-    // B. Flower Burst (THE GALAXY SPIRAL STYLE)
+    // B. Flower Burst (BALANCED CINEMATIC GALAXY SPIRAL STYLE)
     const flowers = document.querySelectorAll(".flower-particle");
     const NUM_ARMS = 3; // 3 lengan spiral galaksi
     
@@ -229,7 +229,7 @@ function setupWelcomeGate() {
       
       const randomRotation = Math.random() * 360 + 720; 
       const randomScale = Math.random() * 1.5 + 1;
-      const duration = progress * 1.5 + 1.0; // Durasi menembak bervariasi
+      const duration = progress * 0.8 + 0.6; // Durasi meledak seimbang (0.6s - 1.4s)
 
       tl.to(flower, {
         x: endX,
@@ -239,23 +239,23 @@ function setupWelcomeGate() {
         opacity: 1,
         duration: duration,
         ease: "power2.out"
-      }, progress * 1.5); // Stagger mengikuti garis spiral bersama-sama
+      }, progress * 0.7); // Stagger meledak smooth & anggun
       
-      // Setelah spiral terbentuk, jatuh perlahan bagaikan bintang jatuh
+      // Setelah meledak, jatuh perlahan dan pudar secara elegan
       gsap.to(flower, {
-        y: endY + (Math.random() * 600 + 400),
+        y: endY + (Math.random() * 500 + 350),
         opacity: 0,
         rotation: randomRotation + 180,
-        duration: Math.random() * 3 + 3,
+        duration: Math.random() * 1.5 + 1.8,
         ease: "power1.inOut",
-        delay: (progress * 1.5) + duration + 0.5 
+        delay: (progress * 0.7) + duration + 0.2
       });
     });
 
-    // Hapus welcome-gate sepenuhnya setelah semua bunga selesai berjatuhan (misal ~8 detik)
+    // Hapus welcome-gate sepenuhnya setelah ~4.2 detik (durasi sedang & pas)
     setTimeout(() => {
       welcomeGate.classList.add('is-hidden');
-    }, 8000);
+    }, 4200);
   });
 }
 

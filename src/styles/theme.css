@@ -2,41 +2,49 @@
    DESIGN SYSTEM - ROMANTIC STARRY NIGHT & FLOWER PETALS THEME
    ==================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Color Palette - Romantic Pink & Lavender (Vivid Pastel) */
-  --bg-deep-space: #FBE8E8;
-  --bg-purple-dark: #F9D8D8;
-  --bg-purple-mid: #FBE8E8;
-  --bg-purple-accent: #EDA8A8;
+  /* Ethereal Romance Design System Tokens */
+  --color-primary: #E89898;
+  --color-secondary: #A67BB5;
+  --color-tertiary: #7D5A95;
+  --color-neutral: #7F7574;
+  --color-dark-primary: #7D3C3C;
+  --color-dark-inverted: #362426;
+
+  /* Color Palette - Romantic Ethereal Pink & Lavender */
+  --bg-deep-space: #F8ECEC;
+  --bg-purple-dark: #F5DFDF;
+  --bg-purple-mid: #F8ECEC;
+  --bg-purple-accent: #E89898;
   
-  /* Pink & Lavender Accent Tokens - Deeper & More Saturated */
-  --rose-gold-primary: #A67BB5;   /* deep lavender */
-  --rose-gold-light: #7D5A95;     /* rich purple */
+  /* Pink & Lavender Accent Tokens */
+  --rose-gold-primary: #A67BB5;   /* secondary lavender */
+  --rose-gold-light: #7D5A95;     /* tertiary deep purple */
   --rose-gold-bright: #C49ED4;    /* medium lavender */
-  --rose-gold-deep: #8F66A8;      /* deep violet-purple */
-  --rose-gold-dark: #5e3d75;
-  --rose-pink-soft: #E89898;      /* vivid salmon pink */
+  --rose-gold-deep: #7D5A95;      /* deep violet-purple */
+  --rose-gold-dark: #362426;      /* dark inverted taupe */
+  --rose-pink-soft: #E89898;      /* primary salmon rose */
   --rose-gold-glow: rgba(166, 123, 181, 0.4);
   --rose-gold-border: rgba(232, 152, 152, 0.7);
   --rose-gold-border-hover: rgba(166, 123, 181, 0.85);
 
-  /* Text Colors - Deep Mauve, High Contrast */
-  --text-main: #2e1a2e;
-  --text-muted: #6b4560;
-  --text-subtle: #9a7090;
+  /* Text Colors - High Contrast Mauve & Neutral Taupe */
+  --text-main: #362426;
+  --text-muted: #7F7574;
+  --text-subtle: #9A8988;
   --text-rose-gold: #7D5A95;
 
-  /* Glassmorphism Surface Tokens - Richer opacity */
-  --glass-bg: rgba(249, 216, 216, 0.82);
-  --glass-bg-hover: rgba(251, 232, 232, 0.92);
+  /* Glassmorphism Surface Tokens */
+  --glass-bg: rgba(248, 236, 236, 0.85);
+  --glass-bg-hover: rgba(253, 246, 246, 0.94);
   --glass-border: 1px solid var(--rose-gold-border);
   --glass-blur: blur(14px);
-  --glass-shadow: 0 8px 28px rgba(160, 90, 110, 0.22), 0 0 18px rgba(166, 123, 181, 0.18);
+  --glass-shadow: 0 8px 28px rgba(127, 117, 116, 0.18), 0 0 18px rgba(166, 123, 181, 0.15);
 
   /* Fonts */
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-serif: 'EB Garamond', Georgia, serif;
   --font-cursive: 'Great Vibes', cursive;
   --font-handwritten: 'Caveat', cursive;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
@@ -68,7 +76,7 @@ html {
 body {
   min-height: 100vh;
   position: relative;
-  background: linear-gradient(160deg, #FBE8E8 0%, #F5CBCB 35%, #DDB8E8 75%, #C9A8DB 100%);
+  background: linear-gradient(160deg, #F8ECEC 0%, #F5DFDF 35%, #E5C3D5 70%, #D4B3E0 100%);
   background-attachment: fixed;
   line-height: 1.7;
   font-size: 18px;

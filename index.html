@@ -36,28 +36,7 @@
          ==================================================================== -->
     <div id="pin-gate" class="pin-gate-overlay">
       <div class="pin-content-card">
-        <!-- Glowing Golden Padlock Icon -->
-        <div class="pin-padlock-wrapper">
-          <svg id="pin-padlock-icon" class="pin-padlock-svg" width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <!-- Shackle -->
-            <path id="padlock-shackle" d="M7 11V7a5 5 0 0 1 10 0v4" stroke="url(#goldGradient)" />
-            <!-- Body -->
-            <rect x="5" y="11" width="14" height="10" rx="3" fill="url(#goldGradient)" stroke="none" />
-            <!-- Keyhole -->
-            <circle cx="12" cy="15" r="1" fill="#120924" />
-            <path d="M12 16v2" stroke="#120924" stroke-width="1.5" />
-            <defs>
-              <linearGradient id="goldGradient" x1="5" y1="7" x2="19" y2="21" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#f8dfbe" />
-                <stop offset="50%" stop-color="#e0a96d" />
-                <stop offset="100%" stop-color="#b87333" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-
         <h2 id="pin-title" class="pin-title heading-rose-gold">For You, My Love</h2>
-        <p id="pin-subtitle" class="pin-subtitle">Enter our 4-digit secret code to unlock your birthday surprise</p>
 
         <!-- 4 PIN Dots Display -->
         <div id="pin-dots" class="pin-dots-display">
@@ -78,9 +57,9 @@
           <button class="pin-key-btn" data-key="7">7</button>
           <button class="pin-key-btn" data-key="8">8</button>
           <button class="pin-key-btn" data-key="9">9</button>
-          <button class="pin-key-btn action-btn" data-key="clear" aria-label="Clear">✕</button>
+          <button class="pin-key-btn action-btn" style="visibility: hidden; pointer-events: none;"></button>
           <button class="pin-key-btn" data-key="0">0</button>
-          <button class="pin-key-btn action-btn" data-key="submit" aria-label="Submit">↵</button>
+          <button class="pin-key-btn action-btn" data-key="clear" aria-label="Clear">⌫</button>
         </div>
 
         <span id="pin-hint" class="pin-hint-text">Hint: Our special date (Default PIN: 2628)</span>
@@ -91,11 +70,21 @@
          1. WELCOME GATE (Flower Explosion)
          ==================================================================== -->
     <div id="welcome-gate" class="welcome-gate-overlay is-hidden">
-      <!-- INITIAL VIEW (GIFT BOX) -->
+      <!-- INITIAL VIEW (GIFT BOX CARD) -->
       <div id="initial-view">
-        <div class="gift-icon">🎁</div> 
-        <h2 class="surprise-title">A LITTLE BIRTHDAY SURPRISE</h2>
-        <p class="tap-hint">TAP ANYWHERE</p>
+        <div class="surprise-card">
+          <div class="surprise-icon-wrapper">
+            <svg class="surprise-gift-svg" width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="#7D3C3C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 12v10H4V12"/>
+              <path d="M2 7h20v5H2z"/>
+              <path d="M12 7v15"/>
+              <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+              <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+            </svg>
+          </div>
+          <h2 class="surprise-title">A LITTLE BIRTHDAY SURPRISE</h2>
+          <p class="tap-hint">TAP ANYWHERE TO OPEN</p>
+        </div>
       </div>
 
       <!-- FLOWER CONTAINER (For GSAP Burst) -->

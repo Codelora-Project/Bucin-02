@@ -12,10 +12,12 @@
   
   <!-- Import GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script type="module" crossorigin src="/assets/index-bgzVvA7-.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-PmXxyPYt.css">
+  <script type="module" crossorigin src="/assets/index-B3QINA8l.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DY_ADS2e.css">
 </head>
 <body>
+  <!-- Scroll Progress Bar -->
+  <div id="scroll-progress-bar"></div>
 
   <!-- Ambient Starry Night & Falling Petals Canvas -->
   <canvas id="particles-canvas"></canvas>
@@ -28,12 +30,9 @@
     <div id="pin-gate" class="pin-gate-overlay">
       <div class="pin-content-card">
         <h2 id="pin-title" class="pin-title heading-rose-gold">For You, My Love</h2>
-        <p id="pin-subtitle" class="pin-subtitle">Enter our secret code to open your birthday surprise</p>
 
-        <!-- PIN Dots Display -->
+        <!-- 4 PIN Dots Display -->
         <div id="pin-dots" class="pin-dots-display">
-          <div class="pin-dot"></div>
-          <div class="pin-dot"></div>
           <div class="pin-dot"></div>
           <div class="pin-dot"></div>
           <div class="pin-dot"></div>
@@ -51,12 +50,12 @@
           <button class="pin-key-btn" data-key="7">7</button>
           <button class="pin-key-btn" data-key="8">8</button>
           <button class="pin-key-btn" data-key="9">9</button>
-          <button class="pin-key-btn action-btn" data-key="clear">✕</button>
+          <button class="pin-key-btn action-btn" style="visibility: hidden; pointer-events: none;"></button>
           <button class="pin-key-btn" data-key="0">0</button>
-          <button class="pin-key-btn action-btn" data-key="submit">↩</button>
+          <button class="pin-key-btn action-btn" data-key="clear" aria-label="Clear">⌫</button>
         </div>
 
-        <span id="pin-hint" class="pin-hint-text">Hint: Our special date (Default PIN: 000000)</span>
+        <span id="pin-hint" class="pin-hint-text">Hint: Our special date (Default PIN: 2628)</span>
       </div>
     </div>
 
@@ -64,28 +63,25 @@
          1. WELCOME GATE (Flower Explosion)
          ==================================================================== -->
     <div id="welcome-gate" class="welcome-gate-overlay is-hidden">
-      <!-- INITIAL VIEW (GIFT BOX) -->
+      <!-- INITIAL VIEW (GIFT BOX CARD) -->
       <div id="initial-view">
-        <div class="gift-icon">🎁</div> 
-        <h2 class="surprise-title">A LITTLE BIRTHDAY SURPRISE</h2>
-        <p class="tap-hint">TAP ANYWHERE</p>
+        <div class="surprise-card">
+          <div class="surprise-icon-wrapper">
+            <svg class="surprise-gift-svg" width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="#7D3C3C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 12v10H4V12"/>
+              <path d="M2 7h20v5H2z"/>
+              <path d="M12 7v15"/>
+              <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+              <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+            </svg>
+          </div>
+          <h2 class="surprise-title">A LITTLE BIRTHDAY SURPRISE</h2>
+          <p class="tap-hint">TAP ANYWHERE TO OPEN</p>
+        </div>
       </div>
 
       <!-- FLOWER CONTAINER (For GSAP Burst) -->
       <div id="flower-container"></div>
-
-      <!-- GREETING CARD (Final State) -->
-      <div id="greeting-card">
-        <p class="card-subtitle">happy birthday, Citra</p>
-        <h1 class="card-title">To The Prettiest Girl, <br>Citra Mutia</h1>
-        <p class="card-message">
-          I hope today brings you as much joy as you give to everyone around you.
-        </p>
-        
-        <button id="welcome-continue-btn" class="welcome-continue-btn">
-          Lanjut ke Kejutannya ➔
-        </button>
-      </div>
     </div>
 
 
@@ -124,57 +120,6 @@
           <div id="hero-scroll-btn" class="hero-scroll-indicator">
             <span id="hero-scroll-hint" class="hero-scroll-text">Scroll down to explore your surprise</span>
             <svg class="hero-scroll-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
-          </div>
-        </div>
-      </section>
-
-      <!-- DIGITAL BOUQUET SECTION -->
-      <section id="section-bouquet" class="section-container">
-        <div class="section-header reveal-on-scroll">
-          <div id="bouquet-subtitle" class="section-subtitle">My First Gift</div>
-          <h2 id="bouquet-title" class="section-title">A Digital Bouquet</h2>
-          <div id="bouquet-subtitle-2" class="section-subtitle" style="text-transform: none; font-size: 0.9rem; margin-top: 8px;">Each flower holds a little message just for you</div>
-        </div>
-
-        <div class="bouquet-container reveal-on-scroll">
-          <!-- Flower Arch and Vase Container -->
-          <div class="bouquet-arch-wrapper">
-            <!-- Vase Graphic -->
-            <div class="vase-graphic">
-              <svg width="160" height="120" viewBox="0 0 160 120" fill="none">
-                <!-- Stalks -->
-                <path d="M80 110 L80 10" stroke="#6b8e5c" stroke-width="3" stroke-linecap="round"/>
-                <path d="M80 110 L45 35" stroke="#6b8e5c" stroke-width="3" stroke-linecap="round"/>
-                <path d="M80 110 L115 35" stroke="#6b8e5c" stroke-width="3" stroke-linecap="round"/>
-                <path d="M80 110 L25 70" stroke="#6b8e5c" stroke-width="3" stroke-linecap="round"/>
-                <path d="M80 110 L135 70" stroke="#6b8e5c" stroke-width="3" stroke-linecap="round"/>
-                
-                <!-- Leaves -->
-                <ellipse cx="65" cy="55" rx="8" ry="4" transform="rotate(-45 65 55)" fill="#6b8e5c"/>
-                <ellipse cx="95" cy="55" rx="8" ry="4" transform="rotate(45 95 55)" fill="#6b8e5c"/>
-                <ellipse cx="55" cy="75" rx="10" ry="5" transform="rotate(-30 55 75)" fill="#6b8e5c"/>
-                <ellipse cx="105" cy="75" rx="10" ry="5" transform="rotate(30 105 75)" fill="#6b8e5c"/>
-                
-                <!-- Bear Head Vase Body -->
-                <!-- Left Ear -->
-                <circle cx="55" cy="90" r="12" fill="rgba(224, 122, 142, 0.6)"/>
-                <!-- Right Ear -->
-                <circle cx="105" cy="90" r="12" fill="rgba(224, 122, 142, 0.6)"/>
-                <!-- Face -->
-                <rect x="50" y="85" width="60" height="25" rx="12" fill="rgba(224, 122, 142, 0.6)"/>
-              </svg>
-            </div>
-
-            <div id="bouquet-flowers" class="bouquet-flowers-arch">
-              <!-- Populated dynamically from src/config/content.js -->
-            </div>
-          </div>
-
-          <!-- Message Card -->
-          <div class="bouquet-display-card">
-            <p id="bouquet-active-message" class="bouquet-active-message">
-              Tap any flower in the bouquet above to reveal its secret message
-            </p>
           </div>
         </div>
       </section>
@@ -332,15 +277,52 @@
       <!-- SPECIAL MULTI-TRACK PLAYLIST SECTION -->
       <section id="section-playlist" class="section-container">
         <div class="section-header reveal-on-scroll">
-          <div class="section-subtitle">Our Soundtrack</div>
+          <div class="section-subtitle" style="font-size: 0.88rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;">— OUR SONGS —</div>
           <h2 class="section-title">Special <span>Playlist</span></h2>
-          <div class="section-divider">
-            <span class="section-divider-sparkle">✦</span>
-          </div>
+          <p style="font-size: 0.95rem; color: var(--text-muted); margin-top: 8px; font-style: italic;">Songs that always remind me of you</p>
         </div>
 
         <div class="playlist-container reveal-on-scroll">
-          <div id="playlist-tracks" class="playlist-card">
+          <!-- Main Music Player UI -->
+          <div class="music-player-card">
+            <div class="player-artwork-wrapper">
+              <div id="player-vinyl" class="player-vinyl-disc">
+                <div class="player-vinyl-center"></div>
+              </div>
+            </div>
+            
+            <div class="player-track-info">
+              <h3 id="player-title" class="player-title">Track Title</h3>
+              <p id="player-artist" class="player-artist">Artist Name</p>
+            </div>
+
+            <div class="player-progress-container">
+              <span id="player-time-current" class="player-time">0:00</span>
+              <div id="player-progress-bar" class="player-progress-bar">
+                <div id="player-progress-fill" class="player-progress-fill"></div>
+                <div id="player-progress-thumb" class="player-progress-thumb"></div>
+              </div>
+              <span id="player-time-total" class="player-time">0:00</span>
+            </div>
+
+            <div class="player-controls">
+              <button id="player-btn-prev" class="player-btn" aria-label="Previous">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+              </button>
+              <button id="player-btn-play" class="player-btn player-btn-play" aria-label="Play/Pause">
+                <!-- Play Icon Default -->
+                <svg id="player-icon-play" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                <!-- Pause Icon Hidden Default -->
+                <svg id="player-icon-pause" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+              </button>
+              <button id="player-btn-next" class="player-btn" aria-label="Next">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Playlist Tracks -->
+          <div id="playlist-tracks" class="playlist-tracks">
             <!-- Populated dynamically from src/config/content.js -->
           </div>
         </div>
