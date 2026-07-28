@@ -206,7 +206,7 @@ function setupWelcomeGate() {
       }
     });
 
-    // B. Flower Burst (BALANCED CINEMATIC GALAXY SPIRAL STYLE)
+    // B. Flower Burst (CINEMATIC SLOW-MOTION GALAXY SPIRAL STYLE)
     const flowers = document.querySelectorAll(".flower-particle");
     const NUM_ARMS = 3; // 3 lengan spiral galaksi
     
@@ -229,7 +229,7 @@ function setupWelcomeGate() {
       
       const randomRotation = Math.random() * 360 + 720; 
       const randomScale = Math.random() * 1.5 + 1;
-      const duration = progress * 0.8 + 0.6; // Durasi meledak seimbang (0.6s - 1.4s)
+      const duration = progress * 1.2 + 1.0; // Durasi meledak lebih lambat & anggun (1.0s - 2.2s)
 
       tl.to(flower, {
         x: endX,
@@ -239,23 +239,23 @@ function setupWelcomeGate() {
         opacity: 1,
         duration: duration,
         ease: "power2.out"
-      }, progress * 0.7); // Stagger meledak smooth & anggun
+      }, progress * 1.0); // Stagger meledak bertahap & melayang halus
       
-      // Setelah meledak, jatuh perlahan dan pudar secara elegan
+      // Setelah meledak, jatuh perlahan dan pudar secara santai
       gsap.to(flower, {
-        y: endY + (Math.random() * 500 + 350),
+        y: endY + (Math.random() * 500 + 400),
         opacity: 0,
         rotation: randomRotation + 180,
-        duration: Math.random() * 1.5 + 1.8,
+        duration: Math.random() * 2.0 + 2.5, // Durasi gugur 2.5s - 4.5s
         ease: "power1.inOut",
-        delay: (progress * 0.7) + duration + 0.2
+        delay: (progress * 1.0) + duration + 0.3
       });
     });
 
-    // Hapus welcome-gate sepenuhnya setelah ~4.2 detik (durasi sedang & pas)
+    // Hapus welcome-gate sepenuhnya setelah ~6.0 detik (durasi sinematik santai)
     setTimeout(() => {
       welcomeGate.classList.add('is-hidden');
-    }, 4200);
+    }, 6000);
   });
 }
 
