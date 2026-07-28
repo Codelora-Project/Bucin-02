@@ -81,42 +81,42 @@ export const CONFIG = {
   fotoGallery: [
     {
       id: 1,
-      url: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80",
+      url: "https://i.pinimg.com/736x/f9/a5/89/f9a589519eadc779d5aa01773c6355d0.jpg",
       title: "Our First Date",
       caption: "Grabbing coffee together and talking for hours without realizing the time",
       date: "Our First Encounter"
     },
     {
       id: 2,
-      url: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=80",
+      url: "https://i.pinimg.com/736x/d8/20/35/d820353e9749928badafacc1b9cafdbb.jpg",
       title: "Weekend Getaway",
       caption: "Watching the golden sunset together by the ocean",
       date: "A Sunny Day"
     },
     {
       id: 3,
-      url: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=800&q=80",
+      url: "https://i.pinimg.com/736x/11/5b/dc/115bdccc81ee296f154e6bd07a3e8a8f.jpg",
       title: "Laughing Together",
       caption: "That hilarious moment when we couldn't stop laughing",
       date: "Joyful Times"
     },
     {
       id: 4,
-      url: "https://images.unsplash.com/photo-1529634806980-85c3dd6d34ac?auto=format&fit=crop&w=800&q=80",
+      url: "https://i.pinimg.com/vwebp/1200x/ac/73/be/ac73be8da35e7dccaf070b29528e6fdb.webp",
       title: "Celebrating You",
       caption: "So grateful for every milestone we celebrate side by side",
       date: "Your Special Day"
     },
     {
       id: 5,
-      url: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80",
+      url: "https://i.pinimg.com/vwebp/1200x/e0/25/b5/e025b58045cb6223c95f8415ffcd5522.webp",
       title: "Sweet Quiet Moments",
       caption: "Just relaxing together on a cozy evening",
       date: "Quiet Evenings"
     },
     {
       id: 6,
-      url: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
+      url: "https://i.pinimg.com/736x/6e/a3/bf/6ea3bfec28c6f2f804af25b44c4bbcaf.jpg",
       title: "Holding Hands",
       caption: "Whatever comes next, I'm glad we're in this together",
       date: "Always"
@@ -249,13 +249,13 @@ export const CONFIG = {
       id: 2,
       title: "Until I Found You",
       artist: "Stephen Sanchez",
-      audioUrl: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=piano-romantic-love-112199.mp3"
+      audioUrl: "/songs/until i found you.mp3"
     },
     {
       id: 3,
       title: "Angel Baby",
       artist: "Troye Sivan",
-      audioUrl: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8b417c8.mp3?filename=romantic-ambient-10287.mp3"
+      audioUrl: "/songs/angel baby.mp3"
     }
   ],
 
