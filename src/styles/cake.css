@@ -95,33 +95,32 @@
 
 .cake-flame-group {
   cursor: pointer;
-  transform-origin: center bottom;
-  animation: flameFlicker 1.8s ease-in-out infinite alternate;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform-origin: 100px 52px;
+  transform-box: fill-box;
+  animation: flameFlicker 2s ease-in-out infinite alternate;
+  transition: opacity 0.2s ease, filter 0.2s ease;
 }
 
 @keyframes flameFlicker {
-  0% { transform: rotate(-2deg) scale(1); }
-  25% { transform: rotate(3deg) scale(1.08, 0.95); }
-  50% { transform: rotate(-3deg) scale(0.96, 1.05); }
-  75% { transform: rotate(2deg) scale(1.04); }
-  100% { transform: rotate(-1deg) scale(1); }
+  0% { transform: rotate(-1.5deg) scale(1); }
+  50% { transform: rotate(2deg) scale(1.03, 0.97); }
+  100% { transform: rotate(-1deg) scale(0.98, 1.02); }
 }
 
-/* Intense trembling when Press & Holding */
+/* Gentle flickering wind when Press & Holding */
 .cake-flame-group.is-holding {
-  animation: flameTrembleHold 0.12s ease-in-out infinite alternate !important;
+  animation: flameHoldWind 0.25s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 8px rgba(255, 174, 66, 0.8));
 }
 
-@keyframes flameTrembleHold {
-  0% { transform: rotate(-9deg) scale(0.88, 1.12); }
-  50% { transform: rotate(11deg) scale(1.15, 0.82); }
-  100% { transform: rotate(-7deg) scale(0.82, 1.08); }
+@keyframes flameHoldWind {
+  0% { transform: rotate(-4deg) scale(0.92, 0.88); }
+  100% { transform: rotate(5deg) scale(0.85, 0.82); }
 }
 
 .cake-flame-group.is-blown {
   opacity: 0 !important;
-  transform: scale(0.1) translateY(-25px) !important;
+  transform: scale(0.1) translateY(-20px) !important;
   pointer-events: none;
 }
 

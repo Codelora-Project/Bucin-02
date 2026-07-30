@@ -827,9 +827,10 @@ function setupBirthdayCake() {
       progressFill.style.strokeDashoffset = `${strokeOffset}`;
     }
 
-    // Shrink and tremble flame dynamically as progress advances
-    const flameScale = 1 - progress * 0.65;
-    const flameOpacity = 1 - progress * 0.45;
+    // Shrink and dim flame dynamically as progress advances (scaling around wick base 100px 52px)
+    const flameScale = 1 - progress * 0.7;
+    const flameOpacity = 1 - progress * 0.5;
+    flameGroup.style.transformOrigin = '100px 52px';
     flameGroup.style.transform = `scale(${flameScale})`;
     flameGroup.style.opacity = `${flameOpacity}`;
 
