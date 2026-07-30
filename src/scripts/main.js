@@ -341,6 +341,8 @@ function setupWelcomeGate() {
       if (mainContent) {
         mainContent.style.display = 'block';
         mainContent.style.opacity = '1';
+        // Prepare curtain reveal: content is initially clipped at the top (height 0)
+        mainContent.style.clipPath = 'inset(0% 0% 100% 0%)';
       }
       
       if (audioCtrl) {
@@ -354,25 +356,12 @@ function setupWelcomeGate() {
       welcomeGate.style.backgroundColor = "transparent";
     }, null, 1.4);
 
-    // Top-to-Bottom Staggered Reveal for Hero Elements (Curtain Unveil)
-    const heroElements = [
-      document.getElementById('hero-subtitle'),
-      document.getElementById('hero-title'),
-      document.getElementById('hero-message'),
-      document.querySelector('.hero-days-pill'),
-      document.getElementById('hero-scroll-btn')
-    ].filter(Boolean);
-
-    gsap.set(heroElements, { y: -45, opacity: 0 });
-
-    heroElements.forEach((el, index) => {
-      tl.to(el, {
-        y: 0,
-        opacity: 1,
-        duration: 0.75,
-        ease: "power2.out"
-      }, 1.5 + (index * 0.18));
-    });
+    // 7. Sync Curtain Reveal (Wipe effect matching falling flowers from top to bottom)
+    tl.to('#main-content', {
+      clipPath: 'inset(0% 0% 0% 0%)',
+      duration: 2.0,
+      ease: "power1.in" // Matches the falling flowers ease
+    }, 1.55);
 
     // 7. FLOWERS FALL DOWNWARD WITH WIND SWAY (Left-Right Swaying Motion)
     flowers.forEach((flower, index) => {
