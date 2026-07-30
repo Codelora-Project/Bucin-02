@@ -38,11 +38,11 @@ export function initParticleEngine() {
   const petalCount = isMobile ? 16 : Math.min(40, Math.floor(width / 25));
   const petals = [];
   const petalColors = [
-    'rgba(245, 185, 200, 0.75)', // Sakura Pink
-    'rgba(224, 169, 109, 0.80)', // Rose Gold
-    'rgba(248, 215, 190, 0.70)', // Blush Peach
-    'rgba(235, 150, 175, 0.65)', // Deep Rose
-    'rgba(255, 230, 238, 0.85)'  // Soft White Blossom
+    'rgba(216, 107, 125, 0.70)', // Dusty Rose Accent
+    'rgba(245, 165, 175, 0.75)', // Soft Blush Pink
+    'rgba(235, 180, 165, 0.70)', // Warm Cream Peach
+    'rgba(200, 82, 101, 0.65)',  // Deep Berry Rose
+    'rgba(255, 245, 240, 0.85)'  // Warm White Blossom
   ];
 
   for (let i = 0; i < petalCount; i++) {

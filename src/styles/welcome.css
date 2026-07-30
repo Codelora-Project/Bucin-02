@@ -197,6 +197,7 @@
   #greeting-card { padding: 2rem 1.5rem; }
 }
 
+
 /* Hero Live Real-Time Counter */
 .hero-live-counter {
   display: flex;
@@ -214,16 +215,16 @@
   justify-content: center;
   min-width: 64px;
   padding: 10px 8px;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(232, 152, 152, 0.5);
+  background: #FFFFFF;
+  border: 1px solid rgba(220, 180, 180, 0.4);
   border-radius: 14px;
-  box-shadow: 0 4px 12px rgba(180, 120, 130, 0.1), inset 0 0 8px rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 14px rgba(180, 140, 140, 0.08);
   transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .counter-unit:hover {
   transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.9);
+  background: #FFFDFB;
 }
 
 .counter-unit span {
@@ -231,10 +232,7 @@
   font-size: 1.7rem;
   font-weight: 700;
   line-height: 1;
-  color: #7D3C3C;
-  background: linear-gradient(135deg, #7D3C3C 0%, #A67BB5 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--text-main);
 }
 
 .counter-unit label {
@@ -242,7 +240,7 @@
   font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 1.2px;
-  color: var(--text-muted);
+  color: var(--text-subtle);
   margin-top: 4px;
   font-weight: 700;
 }

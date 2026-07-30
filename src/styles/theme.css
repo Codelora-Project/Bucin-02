@@ -1,58 +1,58 @@
 /* ====================================================================
-   DESIGN SYSTEM - ROMANTIC STARRY NIGHT & FLOWER PETALS THEME
+   DESIGN SYSTEM - ROMANTIC WARM CREAM & DUSTY ROSE THEME
    ==================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Ethereal Romance Design System Tokens */
-  --color-primary: #E89898;
-  --color-secondary: #A67BB5;
-  --color-tertiary: #7D5A95;
-  --color-neutral: #7F7574;
-  --color-dark-primary: #7D3C3C;
-  --color-dark-inverted: #362426;
+  /* Design Tokens - Warm Cream & Dusty Rose Vibe */
+  --color-primary: #C85265;
+  --color-secondary: #D86B7D;
+  --color-tertiary: #A74354;
+  --color-neutral: #8C787C;
+  --color-dark-primary: #332225;
+  --color-dark-inverted: #FAF4EE;
 
-  /* Color Palette - Romantic Ethereal Pink & Lavender */
-  --bg-deep-space: #F8ECEC;
-  --bg-purple-dark: #F5DFDF;
-  --bg-purple-mid: #F8ECEC;
-  --bg-purple-accent: #E89898;
+  /* Color Palette - Warm Cream & Soft Ambient Glow */
+  --bg-deep-space: #FAF4EE;
+  --bg-purple-dark: #FAF0E6;
+  --bg-purple-mid: #FFFBF7;
+  --bg-purple-accent: #D86B7D;
   
-  /* Pink & Lavender Accent Tokens */
-  --rose-gold-primary: #A67BB5;   /* secondary lavender */
-  --rose-gold-light: #7D5A95;     /* tertiary deep purple */
-  --rose-gold-bright: #C49ED4;    /* medium lavender */
-  --rose-gold-deep: #7D5A95;      /* deep violet-purple */
-  --rose-gold-dark: #362426;      /* dark inverted taupe */
-  --rose-pink-soft: #E89898;      /* primary salmon rose */
-  --rose-gold-glow: rgba(166, 123, 181, 0.4);
-  --rose-gold-border: rgba(232, 152, 152, 0.7);
-  --rose-gold-border-hover: rgba(166, 123, 181, 0.85);
+  /* Dusty Rose & Soft Blush Tokens */
+  --rose-gold-primary: #D86B7D;   /* main dusty rose */
+  --rose-gold-light: #E890A0;     /* light rose */
+  --rose-gold-bright: #F5A5B5;    /* bright soft pink */
+  --rose-gold-deep: #C85265;      /* deep rose berry */
+  --rose-gold-dark: #332225;      /* dark espresso taupe */
+  --rose-pink-soft: #F8D0D8;      /* soft blush */
+  --rose-gold-glow: rgba(216, 107, 125, 0.22);
+  --rose-gold-border: rgba(216, 107, 125, 0.35);
+  --rose-gold-border-hover: rgba(200, 82, 101, 0.6);
 
-  /* Text Colors - High Contrast Mauve & Dark Taupe */
-  --text-main: #362426;
-  --text-muted: #5A4B4B;
-  --text-subtle: #6E5D5C;
-  --text-rose-gold: #7D5A95;
+  /* Text Colors - Espresso Dark & Warm Charcoal */
+  --text-main: #332225;
+  --text-muted: #635255;
+  --text-subtle: #948084;
+  --text-rose-gold: #D86B7D;
 
-  /* Glassmorphism Surface Tokens */
-  --glass-bg: rgba(248, 236, 236, 0.85);
-  --glass-bg-hover: rgba(253, 246, 246, 0.94);
-  --glass-border: 1px solid var(--rose-gold-border);
-  --glass-blur: blur(14px);
-  --glass-shadow: 0 8px 28px rgba(127, 117, 116, 0.18), 0 0 18px rgba(166, 123, 181, 0.15);
+  /* Glassmorphism & Soft Card Tokens */
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-bg-hover: rgba(255, 255, 255, 0.98);
+  --glass-border: 1px solid rgba(220, 180, 180, 0.35);
+  --glass-blur: blur(16px);
+  --glass-shadow: 0 10px 30px rgba(180, 140, 140, 0.12), 0 2px 8px rgba(180, 140, 140, 0.06);
 
   /* Fonts */
-  --font-serif: 'EB Garamond', Georgia, serif;
+  --font-serif: 'Playfair Display', 'EB Garamond', Georgia, serif;
   --font-cursive: 'Great Vibes', cursive;
   --font-handwritten: 'Caveat', cursive;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 
   /* Transitions & Radii */
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 26px;
   --radius-full: 9999px;
   --ease-romantic: cubic-bezier(0.25, 1, 0.35, 1);
 }
@@ -77,7 +77,10 @@ html {
 body {
   min-height: 100vh;
   position: relative;
-  background: linear-gradient(160deg, #F8ECEC 0%, #F5DFDF 35%, #E5C3D5 70%, #D4B3E0 100%);
+  background: 
+    radial-gradient(circle at 75% 25%, rgba(248, 220, 212, 0.45) 0%, transparent 50%),
+    radial-gradient(circle at 20% 75%, rgba(245, 225, 215, 0.35) 0%, transparent 45%),
+    #FAF4EE;
   background-attachment: fixed;
   line-height: 1.7;
   font-size: 18px;
@@ -177,10 +180,19 @@ body {
 
 .heading-rose-gold {
   font-family: var(--font-serif);
-  background: linear-gradient(135deg, #E89898 0%, #A67BB5 50%, #7D5A95 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 30px rgba(166, 123, 181, 0.25);
+  color: #1A1112;
+  background: none;
+  -webkit-background-clip: initial;
+  -webkit-text-fill-color: #1A1112;
+  text-shadow: none;
+}
+
+#hero-title {
+  color: #1A1112 !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: #1A1112 !important;
+  text-shadow: none !important;
 }
 
 .section-container {
@@ -222,13 +234,13 @@ body {
   align-items: center;
   gap: 12px;
   padding: 24px 36px;
-  background: linear-gradient(135deg, rgba(255, 240, 245, 0.92) 0%, rgba(248, 230, 240, 0.95) 100%);
+  background: #FFFFFF;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(232, 152, 152, 0.65);
+  border: 1px solid rgba(220, 180, 180, 0.4);
   border-radius: 28px;
   margin-bottom: 28px;
-  box-shadow: 0 14px 36px rgba(180, 120, 130, 0.2), 0 0 20px rgba(197, 179, 211, 0.25);
+  box-shadow: 0 10px 30px rgba(180, 140, 140, 0.12), 0 2px 8px rgba(180, 140, 140, 0.05);
   transition: transform 0.3s var(--ease-romantic), box-shadow 0.3s ease;
   max-width: 520px;
   width: 100%;
@@ -236,7 +248,7 @@ body {
 
 .hero-days-pill:hover {
   transform: translateY(-3px);
-  box-shadow: 0 18px 45px rgba(180, 120, 130, 0.28), 0 0 28px rgba(197, 179, 211, 0.35);
+  box-shadow: 0 15px 35px rgba(180, 140, 140, 0.18);
 }
 
 .hero-days-header {
