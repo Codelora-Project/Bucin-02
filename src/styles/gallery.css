@@ -220,10 +220,10 @@
     gap: 24px;
   }
   .polaroid-card {
-    max-width: 230px;
+    max-width: 250px;
   }
-  .polaroid-card.tilt-left-1 { transform: rotate(-2.2deg); }
-  .polaroid-card.tilt-right-1 { transform: rotate(2deg); }
-  .polaroid-card.tilt-left-2 { transform: rotate(-1.5deg); }
-  .polaroid-card.tilt-right-2 { transform: rotate(2.5deg); }
+  .polaroid-card.tilt-left-1 { transform: rotate(-1deg); }
+  .polaroid-card.tilt-right-1 { transform: rotate(1deg); }
+  .polaroid-card.tilt-left-2 { transform: rotate(-0.8deg); }
+  .polaroid-card.tilt-right-2 { transform: rotate(1.2deg); }
 }

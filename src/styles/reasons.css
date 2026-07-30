@@ -176,14 +176,23 @@
     transform: none;
   }
   .envelope-card {
-    padding: 20px 18px;
+    padding: 22px 20px;
   }
   .envelope-title {
-    font-size: 1.4rem;
+    font-size: 1.35rem;
   }
   .envelope-seal {
     width: 42px;
     height: 42px;
     font-size: 1.4rem;
+  }
+  .envelope-letter-text {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    padding: 0 4px;
+  }
+  .envelope-card.is-open .envelope-letter-wrapper {
+    max-height: 500px;
+    padding-top: 14px;
   }
 }

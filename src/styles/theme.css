@@ -30,10 +30,10 @@
   --rose-gold-border: rgba(232, 152, 152, 0.7);
   --rose-gold-border-hover: rgba(166, 123, 181, 0.85);
 
-  /* Text Colors - High Contrast Mauve & Neutral Taupe */
+  /* Text Colors - High Contrast Mauve & Dark Taupe */
   --text-main: #362426;
-  --text-muted: #7F7574;
-  --text-subtle: #9A8988;
+  --text-muted: #5A4B4B;
+  --text-subtle: #6E5D5C;
   --text-rose-gold: #7D5A95;
 
   /* Glassmorphism Surface Tokens */
@@ -212,42 +212,59 @@ body {
   font-style: italic;
 }
 
-/* Days Together Counter Pill */
+/* Days Together Counter Card */
 .hero-days-pill {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
   gap: 12px;
-  padding: 10px 22px;
-  background: rgba(255, 224, 224, 0.9);
-  backdrop-filter: blur(12px);
+  padding: 24px 36px;
+  background: linear-gradient(135deg, rgba(255, 240, 245, 0.92) 0%, rgba(248, 230, 240, 0.95) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(232, 152, 152, 0.65);
-  border-radius: var(--radius-full);
-  margin-bottom: 24px;
-  box-shadow: 0 8px 24px rgba(160, 90, 110, 0.18);
+  border-radius: 28px;
+  margin-bottom: 28px;
+  box-shadow: 0 14px 36px rgba(180, 120, 130, 0.2), 0 0 20px rgba(197, 179, 211, 0.25);
+  transition: transform 0.3s var(--ease-romantic), box-shadow 0.3s ease;
+  max-width: 520px;
+  width: 100%;
+}
+
+.hero-days-pill:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 45px rgba(180, 120, 130, 0.28), 0 0 28px rgba(197, 179, 211, 0.35);
+}
+
+.hero-days-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .hero-days-icon {
-  font-size: 1.2rem;
-}
-
-.hero-days-text-wrapper {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--rose-gold-primary);
+  opacity: 0.9;
 }
 
 .hero-days-label {
-  font-size: 0.68rem;
-  letter-spacing: 1.5px;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  font-weight: 700;
   text-transform: uppercase;
   color: var(--rose-gold-light);
-  opacity: 0.8;
 }
 
 .hero-days-val {
-  font-size: 0.92rem;
-  font-weight: 600;
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-style: italic;
+  font-weight: 500;
   color: var(--text-main);
+  opacity: 0.9;
 }
 
 .hero-scroll-indicator {
@@ -379,10 +396,11 @@ body {
   top: 0;
   bottom: 0;
   left: 50%;
-  width: 2px;
-  background: linear-gradient(180deg, transparent, #F5CBCB 20%, #C5B3D3 80%, transparent);
+  width: 3px;
+  background: linear-gradient(180deg, transparent 0%, #E89898 15%, #A67BB5 50%, #7D5A95 85%, transparent 100%);
   transform: translateX(-50%);
-  opacity: 0.7;
+  box-shadow: 0 0 10px rgba(166, 123, 181, 0.6);
+  opacity: 0.85;
 }
 
 .timeline-item {
@@ -449,8 +467,18 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 1.2rem;
-  box-shadow: 0 4px 14px rgba(197, 179, 211, 0.5);
+  box-shadow: 0 0 14px rgba(166, 123, 181, 0.5), inset 0 0 8px rgba(255, 255, 255, 0.6);
+  animation: badgePulse 3s ease-in-out infinite;
   z-index: 2;
+}
+
+@keyframes badgePulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(166, 123, 181, 0.4), inset 0 0 8px rgba(255, 255, 255, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(166, 123, 181, 0.8), 0 0 10px rgba(232, 152, 152, 0.6);
+  }
 }
 
 /* LOVE NOTES JAR SECTION */

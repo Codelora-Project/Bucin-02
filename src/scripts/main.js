@@ -665,6 +665,7 @@ function setupLoveJar() {
         noteIndex = (noteIndex + 1) % notes.length;
         if (noteText) noteText.textContent = notes[noteIndex];
         noteModal.classList.add('is-active');
+        triggerCelebrationBurst();
       }, 650);
     });
   }
@@ -679,7 +680,10 @@ function renderPlaylist() {
     <div class="playlist-track-item ${idx === 0 ? 'is-active' : ''}" data-index="${idx}">
       <span class="playlist-track-number">${idx + 1}</span>
       <div class="playlist-track-info">
-        <span class="playlist-track-title">${escapeHtml(track.title)}</span>
+        <span class="playlist-track-title">
+          ${escapeHtml(track.title)}
+          ${idx === 0 ? '<span class="track-equalizer"><span></span><span></span><span></span></span>' : ''}
+        </span>
         <span class="playlist-track-artist">${escapeHtml(track.artist)}</span>
       </div>
       <div class="playlist-play-icon">
@@ -694,8 +698,19 @@ function setupPlaylist() {
   items.forEach(item => {
     item.addEventListener('click', () => {
       triggerHaptic('light');
-      items.forEach(i => i.classList.remove('is-active'));
+      items.forEach(i => {
+        i.classList.remove('is-active');
+        const eq = i.querySelector('.track-equalizer');
+        if (eq) eq.remove();
+      });
       item.classList.add('is-active');
+      const titleEl = item.querySelector('.playlist-track-title');
+      if (titleEl && !titleEl.querySelector('.track-equalizer')) {
+        const eqSpan = document.createElement('span');
+        eqSpan.className = 'track-equalizer';
+        eqSpan.innerHTML = '<span></span><span></span><span></span>';
+        titleEl.appendChild(eqSpan);
+      }
 
       const idx = parseInt(item.dataset.index, 10);
       if (audioCtrl) {

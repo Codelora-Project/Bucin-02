@@ -199,25 +199,38 @@
 
 /* Hero Live Real-Time Counter */
 .hero-live-counter {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin: 6px 0 4px 0;
+  gap: 10px;
+  margin: 6px 0;
+  width: 100%;
 }
 
 .counter-unit {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 42px;
+  justify-content: center;
+  min-width: 64px;
+  padding: 10px 8px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(232, 152, 152, 0.5);
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(180, 120, 130, 0.1), inset 0 0 8px rgba(255, 255, 255, 0.9);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.counter-unit:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .counter-unit span {
   font-family: var(--font-serif), Georgia, serif;
-  font-size: 1.55rem;
+  font-size: 1.7rem;
   font-weight: 700;
-  line-height: 1.1;
+  line-height: 1;
   color: #7D3C3C;
   background: linear-gradient(135deg, #7D3C3C 0%, #A67BB5 100%);
   -webkit-background-clip: text;
@@ -226,20 +239,21 @@
 
 .counter-unit label {
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
   color: var(--text-muted);
-  margin-top: 2px;
-  font-weight: 600;
+  margin-top: 4px;
+  font-weight: 700;
 }
 
 .counter-colon {
   font-family: var(--font-serif), Georgia, serif;
-  font-size: 1.35rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: var(--rose-gold-primary);
-  margin-top: -10px;
+  margin: 0 -2px 14px -2px;
+  align-self: center;
   opacity: 0.85;
   animation: colonBlink 1.5s ease-in-out infinite;
 }
@@ -247,4 +261,25 @@
 @keyframes colonBlink {
   0%, 100% { opacity: 0.85; }
   50% { opacity: 0.25; }
+}
+
+@media (max-width: 500px) {
+  .hero-days-pill {
+    padding: 18px 16px;
+    border-radius: 22px;
+  }
+  .counter-unit {
+    min-width: 50px;
+    padding: 8px 4px;
+  }
+  .counter-unit span {
+    font-size: 1.35rem;
+  }
+  .counter-colon {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+  }
+  .hero-days-val {
+    font-size: 0.92rem;
+  }
 }
