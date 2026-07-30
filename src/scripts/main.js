@@ -275,12 +275,10 @@ function setupWelcomeGate() {
     // Timeline GSAP
     const tl = gsap.timeline();
 
-    // 1. Fade out hint text quickly
-    tl.to('.gift-hint-text', {
+    // 1. Hide hint text instantly upon click
+    gsap.set('.gift-hint-text', {
       opacity: 0,
-      y: 10,
-      duration: 0.2,
-      ease: "power1.out"
+      display: "none"
     });
 
     // 2. Wobble & Elastic Shake Gift Box Container (Stage 1)
@@ -310,19 +308,21 @@ function setupWelcomeGate() {
       ease: "power2.in"
     }, 0.68);
 
-    // 5. Flowers Fountain Spray out from inside open gift box to cover screen
+    // 5. Flowers Rapid-Fire Fountain: Menyembur satu per satu secara beruntun dengan sangat cepat dari pusat kado
     const flowerTargets = [];
     flowers.forEach((flower, index) => {
-      // Screen coverage points
+      // Titik akhir penyebaran di layar
       const targetX = (Math.random() - 0.5) * (viewportWidth * 1.35);
       const targetY = (Math.random() - 0.5) * (viewportHeight * 1.35);
       const randomRotation = Math.random() * 720 - 360;
       const randomScale = Math.random() * 1.4 + 0.8;
       
-      const burstDelay = 0.55 + (index / TOTAL_FLOWERS) * 0.65;
-      const burstDuration = Math.random() * 0.4 + 0.6;
-
       flowerTargets.push({ targetX, targetY, randomRotation });
+
+      // Kalkulasi penundaan beruntun (*rapid sequential delay*)
+      // Semakin besar index, semakin telat keluarnya, menciptakan ilusi tembakan senapan mesin/air mancur tiada henti
+      const burstDelay = 0.55 + (index / TOTAL_FLOWERS) * 0.7; 
+      const flightDuration = Math.random() * 0.35 + 0.45; // Waktu melesat terbang
 
       tl.to(flower, {
         x: targetX,
@@ -330,8 +330,8 @@ function setupWelcomeGate() {
         rotation: randomRotation,
         scale: randomScale,
         opacity: 1,
-        duration: burstDuration,
-        ease: "power2.out"
+        duration: flightDuration,
+        ease: "power3.out" // Efek melesat cepat dan melambat di akhir
       }, burstDelay);
     });
 
