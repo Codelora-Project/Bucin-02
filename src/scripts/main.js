@@ -308,10 +308,9 @@ function setupWelcomeGate() {
       ease: "power2.in"
     }, 0.68);
 
-    // 5. Flowers Rapid-Fire Fountain: Menyembur satu per satu secara beruntun dengan sangat cepat dari pusat kado
+    // 5. Flowers Slow-Motion Dream + Gentle Swirl Fountain
     const flowerTargets = [];
     flowers.forEach((flower, index) => {
-      // Titik akhir penyebaran di layar
       const targetX = (Math.random() - 0.5) * (viewportWidth * 1.35);
       const targetY = (Math.random() - 0.5) * (viewportHeight * 1.35);
       const randomRotation = Math.random() * 720 - 360;
@@ -319,29 +318,27 @@ function setupWelcomeGate() {
       
       flowerTargets.push({ targetX, targetY, randomRotation });
 
-      // Kalkulasi penundaan beruntun (*rapid sequential delay*)
-      // Semakin besar index, semakin telat keluarnya, menciptakan ilusi tembakan senapan mesin/air mancur tiada henti
-      const burstDelay = 0.55 + (index / TOTAL_FLOWERS) * 0.7; 
-      const flightDuration = Math.random() * 0.35 + 0.45; // Waktu melesat terbang
+      // Opsi 1 & 2: Waktu sebar diperlama (0.55s - 3.05s) dan waktu melayang (2.5 - 4.0s)
+      const burstDelay = 0.55 + (index / TOTAL_FLOWERS) * 2.5; 
+      const flightDuration = Math.random() * 1.5 + 2.5; 
 
       tl.to(flower, {
         x: targetX,
         y: targetY,
-        rotation: randomRotation,
+        rotation: randomRotation + (Math.random() > 0.5 ? 720 : -720), // Ekstra putaran gemulai
         scale: randomScale,
         opacity: 1,
         duration: flightDuration,
-        ease: "power3.out" // Efek melesat cepat dan melambat di akhir
+        ease: "power1.out" // Sangat lembut dan melayang
       }, burstDelay);
     });
 
-    // 6. AT FULL SCREEN COVERAGE (~1.4s): Reveal main content underneath & start audio
+    // 6. AT FULL SCREEN COVERAGE (~4.0s): Reveal main content underneath & start audio
     tl.call(() => {
       const mainContent = document.getElementById('main-content');
       if (mainContent) {
         mainContent.style.display = 'block';
         mainContent.style.opacity = '1';
-        // Prepare curtain reveal: content is initially clipped at the top (height 0)
         mainContent.style.clipPath = 'inset(0% 0% 100% 0%)';
       }
       
@@ -351,23 +348,22 @@ function setupWelcomeGate() {
       }
       initScrollReveal();
 
-      // Make welcomeGate background transparent so falling flowers overlay main content smoothly
       welcomeGate.style.background = "transparent";
       welcomeGate.style.backgroundColor = "transparent";
-    }, null, 1.4);
+    }, null, 4.0);
 
     // 7. Sync Curtain Reveal (Wipe effect matching falling flowers from top to bottom)
     tl.to('#main-content', {
       clipPath: 'inset(0% 0% 0% 0%)',
-      duration: 2.0,
-      ease: "power1.in" // Matches the falling flowers ease
-    }, 1.55);
+      duration: 3.5, // Wipe super lambat
+      ease: "power1.in" 
+    }, 4.2);
 
-    // 7. FLOWERS FALL DOWNWARD WITH WIND SWAY (Left-Right Swaying Motion)
+    // 8. FLOWERS FALL DOWNWARD WITH WIND SWAY (Left-Right Swaying Motion)
     flowers.forEach((flower, index) => {
       const target = flowerTargets[index];
-      const fallDelay = 1.55 + (Math.random() * 0.45);
-      const fallDuration = Math.random() * 1.2 + 2.0;
+      const fallDelay = 4.2 + (Math.random() * 1.0); // Mulai jatuh di detik 4.2
+      const fallDuration = Math.random() * 2.0 + 3.0; // Jatuh lambat
 
       // Vertical falling motion
       tl.to(flower, {
@@ -393,12 +389,12 @@ function setupWelcomeGate() {
       });
     });
 
-    // 8. Cleanup welcome-gate overlay
+    // 9. Cleanup welcome-gate overlay
     tl.call(() => {
       welcomeGate.classList.add('is-hidden');
       welcomeGate.style.pointerEvents = "none";
       if (initialView) initialView.style.display = "none";
-    }, null, 4.2);
+    }, null, 9.0);
   });
 }
 
