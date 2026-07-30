@@ -62,6 +62,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
@@ -81,6 +82,8 @@ body {
   line-height: 1.7;
   font-size: 18px;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* Background Canvas for Starry Night & Falling Petals Particles */
@@ -651,7 +654,7 @@ body {
   100% { background-position: 200% 0; }
 }
 
-/* Responsive adjustment */
+/* Responsive adjustment for Mobile & Tablet */
 @media (max-width: 768px) {
   .top-nav-bar {
     margin: 12px 14px 0;
@@ -662,14 +665,14 @@ body {
     font-size: 0.78rem;
   }
   .section-container {
-    padding: 80px 20px;
-    min-height: 100dvh; /* Memastikan cinematic scroll juga aktif di HP */
+    padding: 56px 16px;
+    min-height: auto;
   }
   .section-subtitle {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
   }
   .section-title {
-    font-size: 2.6rem;
+    font-size: 2.2rem;
   }
   .timeline-container::before {
     left: 24px;
@@ -687,5 +690,17 @@ body {
   }
   .timeline-icon-badge {
     left: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-container {
+    padding: 44px 14px;
+  }
+  .section-title {
+    font-size: 1.9rem;
+  }
+  .section-subtitle {
+    font-size: 1.55rem;
   }
 }

@@ -1,4 +1,4 @@
-/**
+  /**
  * High-Performance Starry Night & Falling Romantic Flower Petals Engine
  * Fully optimized for 60 FPS performance.
  */
@@ -16,8 +16,10 @@ export function initParticleEngine() {
     height = canvas.height = window.innerHeight;
   });
 
-  // 1. Ambient stars (optimized count)
-  const starCount = Math.min(100, Math.floor((width * height) / 11000));
+  const isMobile = width <= 600;
+
+  // 1. Ambient stars (optimized count for mobile 60fps)
+  const starCount = isMobile ? 35 : Math.min(100, Math.floor((width * height) / 11000));
   const stars = [];
 
   for (let i = 0; i < starCount; i++) {
@@ -33,7 +35,7 @@ export function initParticleEngine() {
   }
 
   // 2. Floating romantic flower petals (Rose Gold & Sakura Pink)
-  const petalCount = Math.min(40, Math.floor(width / 25));
+  const petalCount = isMobile ? 16 : Math.min(40, Math.floor(width / 25));
   const petals = [];
   const petalColors = [
     'rgba(245, 185, 200, 0.75)', // Sakura Pink

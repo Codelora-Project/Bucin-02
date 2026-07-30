@@ -51,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupHeroScroll();
   setupDigitalBouquet();
   setupLightbox();
+  setupOrigamiLetter();
   setupReasonCards();
   setupLoveJar();
   setupPlaylist();
@@ -236,7 +237,7 @@ function setupWelcomeGate() {
     "/flowers/flower-4.png"
   ];
   const isMobile = window.innerWidth <= 600;
-  const TOTAL_FLOWERS = isMobile ? 180 : 440; // Dikurangi signifikan agar HP tidak lag dan animasi lancar
+  const TOTAL_FLOWERS = isMobile ? 90 : 380; // Optimized for 60fps on mobile devices
 
   // Pre-create flower elements
   for (let i = 0; i < TOTAL_FLOWERS; i++) {
@@ -590,6 +591,48 @@ function renderLoveLetter() {
 
   const sigEl = document.getElementById('letter-signature');
   if (sigEl) sigEl.textContent = signature;
+}
+
+function setupOrigamiLetter() {
+  const envelopeCard = document.getElementById('origami-envelope-card');
+  const waxSealBtn = document.getElementById('wax-seal-btn');
+  const refoldBtn = document.getElementById('refold-letter-btn');
+
+  if (!envelopeCard || !waxSealBtn) return;
+
+  const openLetter = () => {
+    triggerHaptic('medium');
+    envelopeCard.classList.add('is-open');
+
+    // Trigger paragraph reveal inside letter smoothly as paper unfolds
+    setTimeout(() => {
+      const paragraphs = document.querySelectorAll('.letter-paragraph');
+      paragraphs.forEach((p, idx) => {
+        setTimeout(() => {
+          p.classList.add('is-visible');
+        }, idx * 280);
+      });
+    }, 600);
+  };
+
+  const foldLetterBack = (e) => {
+    e.stopPropagation();
+    triggerHaptic('light');
+    envelopeCard.classList.remove('is-open');
+    const paragraphs = document.querySelectorAll('.letter-paragraph');
+    paragraphs.forEach(p => p.classList.remove('is-visible'));
+  };
+
+  waxSealBtn.addEventListener('click', openLetter);
+  envelopeCard.addEventListener('click', (e) => {
+    if (!envelopeCard.classList.contains('is-open')) {
+      openLetter();
+    }
+  });
+
+  if (refoldBtn) {
+    refoldBtn.addEventListener('click', foldLetterBack);
+  }
 }
 
 /* 4. Reasons Why I Love You Renderer (Love Envelope Deck) */

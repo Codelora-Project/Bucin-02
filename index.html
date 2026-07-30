@@ -206,7 +206,7 @@
         </div>
       </section>
 
-      <!-- LOVE LETTER SECTION -->
+      <!-- LOVE LETTER SECTION (3D ORIGAMI ENVELOPE) -->
       <section id="section-letter" class="section-container">
         <div class="section-header reveal-on-scroll">
           <div class="section-subtitle">From My Heart</div>
@@ -216,36 +216,75 @@
           </div>
         </div>
 
-        <div class="letter-paper-wrapper reveal-on-scroll">
-          <div class="letter-paper">
-            <div class="letter-wax-seal-badge">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-            </div>
-            <div class="letter-header">
-              <h3 id="letter-title" class="section-title heading-rose-gold" style="font-size: 2.2rem;">
-                A Letter For You
-              </h3>
-              <p id="letter-subtitle" style="font-size: 0.95rem; color: var(--rose-gold-light); margin-top: 4px;">
-                On Your Birthday
-              </p>
-            </div>
-
-            <div id="letter-salutation" class="letter-salutation">
-              Dearest,
-            </div>
-
-            <div id="letter-body" class="letter-body">
-              <!-- Paragraphs populated dynamically with progressive scroll reveal -->
+        <div id="origami-letter-container" class="origami-letter-container reveal-on-scroll">
+          <!-- 3D Vintage Envelope Card Wrapper -->
+          <div id="origami-envelope-card" class="origami-envelope-card">
+            
+            <!-- 3D Rotating Top Flap -->
+            <div class="envelope-flap-top">
+              <svg class="flap-svg" viewBox="0 0 500 200" preserveAspectRatio="none">
+                <polygon points="0,0 500,0 250,190" fill="url(#flapGrad)"/>
+                <defs>
+                  <linearGradient id="flapGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FFF0F5"/>
+                    <stop offset="50%" stop-color="#F7D8E2"/>
+                    <stop offset="100%" stop-color="#E8B0C0"/>
+                  </linearGradient>
+                </defs>
+              </svg>
             </div>
 
-            <div class="letter-footer">
-              <div id="letter-closing-text" class="letter-closing-text">
-                With all my love,
+            <!-- Golden Metallic Wax Seal Button -->
+            <button id="wax-seal-btn" class="origami-wax-seal" title="Tap to open letter">
+              <div class="seal-inner">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                <span class="seal-text">OPEN</span>
               </div>
-              <div id="letter-signature" class="letter-signature">
-                [Your Name]
+            </button>
+
+            <!-- Envelope Pocket Outer Front -->
+            <div class="envelope-pocket-front">
+              <div class="pocket-stamp">🌸</div>
+              <p class="pocket-hint">Tap wax seal to open letter</p>
+            </div>
+
+            <!-- Paper Letter (Slides out & unfolds upon opening) -->
+            <div id="letter-paper" class="letter-paper">
+              <div class="letter-paper-inner">
+                <div class="letter-header">
+                  <h3 id="letter-title" class="section-title heading-rose-gold" style="font-size: 2.2rem;">
+                    A Letter For You
+                  </h3>
+                  <p id="letter-subtitle" style="font-size: 0.95rem; color: var(--rose-gold-light); margin-top: 4px;">
+                    On Your Birthday
+                  </p>
+                </div>
+
+                <div id="letter-salutation" class="letter-salutation">
+                  Dearest,
+                </div>
+
+                <div id="letter-body" class="letter-body">
+                  <!-- Paragraphs populated dynamically with progressive scroll reveal -->
+                </div>
+
+                <div class="letter-footer">
+                  <div id="letter-closing-text" class="letter-closing-text">
+                    With all my love,
+                  </div>
+                  <div id="letter-signature" class="letter-signature">
+                    [Your Name]
+                  </div>
+
+                  <button id="refold-letter-btn" class="refold-letter-btn">
+                    <span>Fold Letter Back ✉️</span>
+                  </button>
+                </div>
               </div>
             </div>
+
           </div>
         </div>
       </section>
