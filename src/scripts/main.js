@@ -7,6 +7,9 @@ let audioCtrl = null;
 let currentPinInput = '';
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Start preloader to cache flower images & gallery assets
+  initPreloader();
+
   // Initialize canvas particle background
   initParticleEngine();
 
@@ -35,6 +38,80 @@ document.addEventListener('DOMContentLoaded', () => {
   setupClosingButton();
   setupScrollProgress();
 });
+
+/* -1. Asset Preloader Manager */
+function initPreloader() {
+  const loadingOverlay = document.getElementById('loading-screen');
+  const progressFill = document.getElementById('loading-progress-fill');
+  const percentText = document.getElementById('loading-percent-text');
+  const statusText = document.getElementById('loading-status-text');
+  const subtitleText = document.getElementById('loading-subtitle');
+
+  if (!loadingOverlay) return;
+
+  const flowerAssets = [
+    '/flowers/flower-1.png',
+    '/flowers/flower-2.png',
+    '/flowers/flower-3.png',
+    '/flowers/flower-4.png'
+  ];
+
+  const galleryAssets = (CONFIG.fotoGallery || []).map(item => item.url).filter(Boolean);
+  const allAssets = [...flowerAssets, ...galleryAssets];
+
+  let loadedCount = 0;
+  const totalAssets = allAssets.length;
+
+  function updateProgress(targetPercent, text) {
+    if (percentText) percentText.textContent = `${Math.round(targetPercent)}%`;
+    if (progressFill) progressFill.style.width = `${targetPercent}%`;
+    if (statusText && text) statusText.textContent = text;
+  }
+
+  if (totalAssets === 0) {
+    finishLoading();
+    return;
+  }
+
+  const startTime = Date.now();
+  const MIN_DISPLAY_TIME = 850; // Smooth minimal threshold for preloader visibility
+
+  const handleAssetLoaded = () => {
+    loadedCount++;
+    const percent = Math.min(100, Math.round((loadedCount / totalAssets) * 100));
+
+    let statusMsg = 'Memuat kelopak bunga... 🌸';
+    if (percent > 40) statusMsg = 'Menyiapkan foto kenangan... 📷';
+    if (percent > 85) statusMsg = 'Hampir selesai... ✨';
+
+    updateProgress(percent, statusMsg);
+
+    if (loadedCount >= totalAssets) {
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = Math.max(0, MIN_DISPLAY_TIME - elapsedTime);
+
+      setTimeout(() => {
+        updateProgress(100, 'Siap! 🎉');
+        if (subtitleText) subtitleText.textContent = 'Semua kejutan sudah siap! ❤️';
+        setTimeout(finishLoading, 450);
+      }, remainingTime);
+    }
+  };
+
+  allAssets.forEach(src => {
+    const img = new Image();
+    img.onload = handleAssetLoaded;
+    img.onerror = handleAssetLoaded; // Ensure app proceeds even if a remote photo fails
+    img.src = src;
+  });
+
+  function finishLoading() {
+    loadingOverlay.classList.add('is-hidden');
+    setTimeout(() => {
+      loadingOverlay.remove();
+    }, 850);
+  }
+}
 
 /* 0. Passcode PIN Gate Renderer & Logic */
 function renderPinGate() {
