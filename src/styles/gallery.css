@@ -214,13 +214,15 @@
   }
 }
 
-@media (max-width: 440px) {
+@media (max-width: 600px) {
   .gallery-scrapbook-container {
     grid-template-columns: 1fr;
     gap: 24px;
+    padding: 4px;
   }
   .polaroid-card {
-    max-width: 250px;
+    max-width: 280px;
+    width: 100%;
   }
   .polaroid-card.tilt-left-1 { transform: rotate(-1deg); }
   .polaroid-card.tilt-right-1 { transform: rotate(1deg); }

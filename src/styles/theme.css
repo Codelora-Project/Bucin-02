@@ -657,16 +657,31 @@ body {
 /* Responsive adjustment for Mobile & Tablet */
 @media (max-width: 768px) {
   .top-nav-bar {
-    margin: 12px 14px 0;
-    padding: 10px 18px;
+    margin: 10px auto 0;
+    padding: 8px 14px;
+    width: calc(100% - 24px);
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .top-nav-brand {
+    font-size: 1.3rem;
   }
   .top-nav-links {
-    gap: 12px;
-    font-size: 0.78rem;
+    gap: 10px;
+    font-size: 0.75rem;
+    overflow-x: auto;
+    max-width: 60%;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .top-nav-links::-webkit-scrollbar {
+    display: none;
   }
   .section-container {
     padding: 56px 16px;
     min-height: auto;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .section-subtitle {
     font-size: 1.8rem;
