@@ -1,0 +1,308 @@
+/* ==========================================================================
+   INTERACTIVE BIRTHDAY CAKE & BLOW THE CANDLE STYLES (PRESS & HOLD)
+   ========================================================================== */
+
+.birthday-cake-container {
+  padding-top: 40px;
+  padding-bottom: 60px;
+  position: relative;
+}
+
+.cake-interactive-ui {
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cake-interactive-ui.is-faded-out {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.95);
+}
+
+.cake-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 44px 32px;
+  text-align: center;
+  box-shadow: var(--glass-shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.4s var(--ease-romantic), box-shadow 0.4s ease;
+}
+
+.cake-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(125, 60, 60, 0.18), 0 0 25px rgba(166, 123, 181, 0.25);
+}
+
+/* Cake Wrapper & Glow */
+.birthday-cake-wrapper {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 16px 0 28px 0;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.candle-glow {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(255, 190, 90, 0.55) 0%, rgba(245, 150, 175, 0.25) 45%, transparent 75%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: glowPulse 2s ease-in-out infinite alternate;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+@keyframes glowPulse {
+  0% { transform: translateX(-50%) scale(0.92); opacity: 0.7; }
+  100% { transform: translateX(-50%) scale(1.1); opacity: 1; }
+}
+
+.candle-glow.is-extinguished {
+  opacity: 0;
+  transform: translateX(-50%) scale(0.5);
+}
+
+/* SVG Cake & Flame */
+.cake-svg {
+  width: 220px;
+  height: 220px;
+  filter: drop-shadow(0 10px 20px rgba(125, 60, 60, 0.15));
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.birthday-cake-wrapper:hover .cake-svg {
+  transform: scale(1.04);
+}
+
+.cake-flame-group {
+  cursor: pointer;
+  transform-origin: center bottom;
+  animation: flameFlicker 1.8s ease-in-out infinite alternate;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+@keyframes flameFlicker {
+  0% { transform: rotate(-2deg) scale(1); }
+  25% { transform: rotate(3deg) scale(1.08, 0.95); }
+  50% { transform: rotate(-3deg) scale(0.96, 1.05); }
+  75% { transform: rotate(2deg) scale(1.04); }
+  100% { transform: rotate(-1deg) scale(1); }
+}
+
+/* Intense trembling when Press & Holding */
+.cake-flame-group.is-holding {
+  animation: flameTrembleHold 0.12s ease-in-out infinite alternate !important;
+}
+
+@keyframes flameTrembleHold {
+  0% { transform: rotate(-9deg) scale(0.88, 1.12); }
+  50% { transform: rotate(11deg) scale(1.15, 0.82); }
+  100% { transform: rotate(-7deg) scale(0.82, 1.08); }
+}
+
+.cake-flame-group.is-blown {
+  opacity: 0 !important;
+  transform: scale(0.1) translateY(-25px) !important;
+  pointer-events: none;
+}
+
+/* Circular SVG Progress Ring */
+.cake-progress-ring-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 250px;
+  height: 250px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.cake-progress-ring-bg {
+  stroke: rgba(125, 60, 60, 0.1);
+  stroke-width: 4;
+}
+
+.cake-progress-ring-fill {
+  stroke: url(#ring-grad);
+  stroke-width: 4;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  stroke-dasharray: 722;
+  stroke-dashoffset: 722;
+  transition: stroke-dashoffset 0.05s linear;
+}
+
+/* Smoke Effect */
+.cake-smoke-group {
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: center bottom;
+}
+
+.cake-smoke-group.is-active {
+  animation: smokeRise 1.8s ease-out forwards;
+}
+
+@keyframes smokeRise {
+  0% {
+    opacity: 0.9;
+    transform: translateY(0) scale(0.8);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateY(-25px) scale(1.4) rotate(15deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-55px) scale(2.2) rotate(-20px);
+  }
+}
+
+/* Instructions & Press and Hold Button */
+.cake-instruction {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  margin-bottom: 22px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  transition: opacity 0.3s ease;
+}
+
+.blow-candle-btn {
+  background: linear-gradient(135deg, var(--rose-gold-primary) 0%, var(--color-dark-primary) 100%);
+  color: #ffffff;
+  border: none;
+  padding: 14px 36px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.96rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(125, 60, 60, 0.25);
+  transition: transform 0.3s var(--ease-romantic), box-shadow 0.3s ease, background 0.3s ease;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.blow-candle-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 10px 28px rgba(125, 60, 60, 0.35);
+}
+
+.blow-candle-btn.is-holding {
+  transform: scale(0.96);
+  box-shadow: 0 4px 14px rgba(125, 60, 60, 0.4);
+}
+
+.blow-candle-btn.is-disabled {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.8);
+}
+
+/* Wish Revealed Modal Card (Floating Card) */
+.wish-revealed-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: linear-gradient(145deg, rgba(255, 245, 248, 0.96) 0%, rgba(252, 236, 242, 0.98) 100%);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(245, 203, 203, 0.8);
+  border-radius: var(--radius-lg);
+  padding: 48px 32px;
+  max-width: 680px;
+  width: 90%;
+  box-shadow: 0 25px 60px rgba(80, 40, 50, 0.35), 0 0 45px rgba(197, 179, 211, 0.45);
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0;
+  transform: translate(-50%, -40%) scale(0.85);
+  transition: opacity 0.6s var(--ease-romantic), transform 0.6s var(--ease-romantic);
+  text-align: center;
+}
+
+.wish-revealed-card.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+  animation: wishEntrance 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes wishEntrance {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -40%) scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.wish-icon-wrapper {
+  margin-bottom: 12px;
+  color: var(--rose-gold-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wish-title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.55rem;
+  color: var(--color-dark-primary);
+  margin-bottom: 12px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.wish-message {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.98rem;
+  color: var(--text-main);
+  line-height: 1.65;
+}
+
+/* Backdrop Dim Overlay */
+.cake-dim-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 10, 20, 0.68);
+  z-index: 9995;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.cake-dim-overlay.is-active {
+  opacity: 1;
+}

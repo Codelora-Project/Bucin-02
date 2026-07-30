@@ -1,10 +1,23 @@
 import { CONFIG } from '../config/content.js';
-import { initParticleEngine, triggerCelebrationBurst } from './particles.js';
+import { initParticleEngine, triggerCelebrationBurst, triggerConfettiFireworks } from './particles.js';
 import { AudioController } from './audio.js';
 import { initScrollReveal } from './scrollReveal.js';
 
 let audioCtrl = null;
 let currentPinInput = '';
+
+/* Mobile Haptic Feedback Helper */
+function triggerHaptic(type = 'light') {
+  if (!('vibrate' in navigator)) return;
+  try {
+    if (type === 'light') navigator.vibrate(20);
+    else if (type === 'medium') navigator.vibrate(40);
+    else if (type === 'heavy') navigator.vibrate([30, 40, 60]);
+    else if (type === 'success') navigator.vibrate([40, 30, 80]);
+  } catch (e) {
+    /* Ignore if unsupported */
+  }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   // Start preloader to cache flower images & gallery assets
@@ -13,15 +26,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize canvas particle background
   initParticleEngine();
 
+  // Initialize live real-time relationship days counter
+  initLiveDaysCounter();
+
   // Populate HTML with CONFIG data
   renderPinGate();
   renderHeroSection();
+  renderDigitalBouquet();
   renderPhotoGallery();
   renderTimeline();
   renderLoveLetter();
   renderReasons();
   renderLoveJar();
   renderPlaylist();
+  renderBirthdayCake();
   renderClosingSection();
 
   // Initialize Audio Controller with Multi-Track Playlist
@@ -31,10 +49,12 @@ document.addEventListener('DOMContentLoaded', () => {
   setupPinGate();
   setupWelcomeGate();
   setupHeroScroll();
+  setupDigitalBouquet();
   setupLightbox();
   setupReasonCards();
   setupLoveJar();
   setupPlaylist();
+  setupBirthdayCake();
   setupClosingButton();
   setupScrollProgress();
 });
@@ -153,6 +173,7 @@ function setupPinGate() {
     // Fast response on touch/mouse without 300ms delay
     const handlePress = (e) => {
       e.preventDefault();
+      triggerHaptic('light');
       keyBtn.classList.add('is-pressed');
       setTimeout(() => keyBtn.classList.remove('is-pressed'), 120);
       
@@ -165,6 +186,7 @@ function setupPinGate() {
 
   function verifyPin() {
     if (currentPinInput === targetPin) {
+      triggerHaptic('success');
       // Trigger Golden Padlock Opening Animation
       if (padlockWrapper) padlockWrapper.classList.add('is-unlocked');
 
@@ -176,6 +198,7 @@ function setupPinGate() {
       }, 550);
       
     } else {
+      triggerHaptic('heavy');
       // Show error shake on dots
       dots.forEach(d => d.classList.add('is-error'));
       setTimeout(() => {
@@ -241,6 +264,7 @@ function setupWelcomeGate() {
   initialView.addEventListener("click", () => {
     if (isAnimating) return;
     isAnimating = true;
+    triggerHaptic('success');
 
     // Hilangkan background overlay welcome-gate LANGSUNG agar latar website utama & canvas langsung tampil 100%
     welcomeGate.style.background = "transparent";
@@ -354,6 +378,38 @@ function renderHeroSection() {
 
   const hintEl = document.getElementById('hero-scroll-hint');
   if (hintEl && scrollHint) hintEl.textContent = scrollHint;
+}
+
+/* 1B. Live Real-Time Days Together Counter */
+function initLiveDaysCounter() {
+  const daysEl = document.getElementById('count-days');
+  const hoursEl = document.getElementById('count-hours');
+  const minsEl = document.getElementById('count-mins');
+  const secsEl = document.getElementById('count-secs');
+
+  if (!daysEl || !hoursEl || !minsEl || !secsEl) return;
+
+  const startDateStr = CONFIG.heroConfig?.relationshipStartDate || '2023-02-14';
+  const startDate = new Date(startDateStr).getTime();
+
+  function updateCounter() {
+    const now = Date.now();
+    const diff = Math.max(0, now - startDate);
+
+    const totalSeconds = Math.floor(diff / 1000);
+    const days = Math.floor(totalSeconds / (3600 * 24));
+    const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+    const mins = Math.floor((totalSeconds % 3600) / 60);
+    const secs = totalSeconds % 60;
+
+    daysEl.textContent = days.toLocaleString();
+    hoursEl.textContent = String(hours).padStart(2, '0');
+    minsEl.textContent = String(mins).padStart(2, '0');
+    secsEl.textContent = String(secs).padStart(2, '0');
+  }
+
+  updateCounter();
+  setInterval(updateCounter, 1000);
 }
 
 function setupHeroScroll() {
@@ -576,6 +632,7 @@ function renderReasons() {
 function setupReasonCards() {
   document.querySelectorAll('.envelope-card').forEach(card => {
     card.addEventListener('click', () => {
+      triggerHaptic('medium');
       card.classList.toggle('is-open');
     });
   });
@@ -599,6 +656,7 @@ function setupLoveJar() {
 
   if (shakeBtn && jarGraphic && noteModal) {
     shakeBtn.addEventListener('click', () => {
+      triggerHaptic('medium');
       jarGraphic.classList.add('is-shaking');
       noteModal.classList.remove('is-active');
 
@@ -635,6 +693,7 @@ function setupPlaylist() {
   const items = document.querySelectorAll('.playlist-track-item');
   items.forEach(item => {
     item.addEventListener('click', () => {
+      triggerHaptic('light');
       items.forEach(i => i.classList.remove('is-active'));
       item.classList.add('is-active');
 
@@ -667,6 +726,7 @@ function setupClosingButton() {
   const hugBtn = document.getElementById('closing-hug-btn');
   if (hugBtn) {
     hugBtn.addEventListener('click', () => {
+      triggerHaptic('heavy');
       triggerCelebrationBurst();
     });
   }
@@ -687,5 +747,184 @@ function setupScrollProgress() {
       const scrollPercent = (scrollTop / docHeight) * 100;
       progressBar.style.width = `${scrollPercent}%`;
     }
+  });
+}
+
+/* 6. Interactive Birthday Cake & Candle Blow */
+function renderBirthdayCake() {
+  const cfg = CONFIG.birthdayCakeConfig;
+  if (!cfg) return;
+
+  const subTitleEl = document.getElementById('cake-section-subtitle');
+  if (subTitleEl && cfg.subtitle) subTitleEl.textContent = cfg.subtitle;
+
+  const titleEl = document.getElementById('cake-section-title');
+  if (titleEl && cfg.title) {
+    const highlightWord = cfg.title.replace(/^Blow the /i, '');
+    titleEl.innerHTML = `Blow the <span>${escapeHtml(highlightWord)}</span>`;
+  }
+
+  const subTextEl = document.getElementById('cake-section-subtext');
+  if (subTextEl && cfg.subtitleText) subTextEl.textContent = cfg.subtitleText;
+
+  const instructEl = document.getElementById('cake-instruction');
+  if (instructEl && cfg.instructionText) instructEl.textContent = cfg.instructionText;
+
+  const blowBtnText = document.getElementById('blow-btn-text');
+  if (blowBtnText && cfg.buttonText) blowBtnText.textContent = cfg.buttonText;
+
+  const wishTitleEl = document.getElementById('wish-title');
+  if (wishTitleEl && cfg.wishTitle) wishTitleEl.textContent = cfg.wishTitle;
+
+  const wishMsgEl = document.getElementById('wish-message');
+  if (wishMsgEl && cfg.wishMessage) wishMsgEl.textContent = cfg.wishMessage;
+}
+
+function setupBirthdayCake() {
+  const cakeTrigger = document.getElementById('birthday-cake-trigger');
+  const blowBtn = document.getElementById('blow-candle-btn');
+  const flameGroup = document.getElementById('cake-flame');
+  const smokeGroup = document.getElementById('cake-smoke');
+  const candleGlow = document.getElementById('candle-glow');
+  const dimOverlay = document.getElementById('cake-dim-overlay');
+  const wishCard = document.getElementById('wish-revealed-card');
+  const blowBtnText = document.getElementById('blow-btn-text');
+  const instructionEl = document.getElementById('cake-instruction');
+  const progressFill = document.getElementById('cake-progress-fill');
+
+  if (!cakeTrigger || !blowBtn || !flameGroup) return;
+
+  let isCandleBlown = false;
+  let holdStartTime = 0;
+  let holdAnimFrame = null;
+  const HOLD_DURATION = 1800; // 1.8 seconds target hold
+  const CIRCLE_CIRCUMFERENCE = 722; // 2 * PI * 115
+
+  const updateHoldProgress = (now) => {
+    if (!holdStartTime || isCandleBlown) return;
+
+    const elapsed = now - holdStartTime;
+    const progress = Math.min(1, elapsed / HOLD_DURATION);
+
+    // Update SVG progress ring
+    if (progressFill) {
+      const strokeOffset = CIRCLE_CIRCUMFERENCE * (1 - progress);
+      progressFill.style.strokeDashoffset = `${strokeOffset}`;
+    }
+
+    // Shrink and tremble flame dynamically as progress advances
+    const flameScale = 1 - progress * 0.65;
+    const flameOpacity = 1 - progress * 0.45;
+    flameGroup.style.transform = `scale(${flameScale})`;
+    flameGroup.style.opacity = `${flameOpacity}`;
+
+    // Haptic tick pulse on mobile
+    if (navigator.vibrate && Math.floor(elapsed / 300) !== Math.floor((elapsed - 16) / 300)) {
+      try { navigator.vibrate(15); } catch (e) {}
+    }
+
+    if (progress >= 1) {
+      completeBlowOut();
+    } else {
+      holdAnimFrame = requestAnimationFrame(updateHoldProgress);
+    }
+  };
+
+  const startHolding = (e) => {
+    if (isCandleBlown) return;
+    if (e && e.cancelable) e.preventDefault();
+
+    holdStartTime = performance.now();
+    flameGroup.classList.add('is-holding');
+    blowBtn.classList.add('is-holding');
+    if (instructionEl) instructionEl.textContent = 'Keep holding...';
+
+    if (holdAnimFrame) cancelAnimationFrame(holdAnimFrame);
+    holdAnimFrame = requestAnimationFrame(updateHoldProgress);
+  };
+
+  const cancelHolding = () => {
+    if (isCandleBlown || !holdStartTime) return;
+
+    holdStartTime = 0;
+    if (holdAnimFrame) {
+      cancelAnimationFrame(holdAnimFrame);
+      holdAnimFrame = null;
+    }
+
+    flameGroup.classList.remove('is-holding');
+    blowBtn.classList.remove('is-holding');
+    flameGroup.style.transform = '';
+    flameGroup.style.opacity = '';
+
+    // Reset progress ring fill
+    if (progressFill) {
+      progressFill.style.strokeDashoffset = `${CIRCLE_CIRCUMFERENCE}`;
+    }
+
+    if (instructionEl) {
+      instructionEl.textContent = CONFIG.birthdayCakeConfig?.instructionText || 'Press and hold to blow out the candle';
+    }
+  };
+
+  const completeBlowOut = () => {
+    isCandleBlown = true;
+    holdStartTime = 0;
+    if (holdAnimFrame) cancelAnimationFrame(holdAnimFrame);
+
+    flameGroup.classList.remove('is-holding');
+    blowBtn.classList.remove('is-holding');
+
+    if (navigator.vibrate) {
+      try { navigator.vibrate([40, 30, 80]); } catch (e) {}
+    }
+
+    // 1. Extinguish flame & glow
+    flameGroup.classList.add('is-blown');
+    if (candleGlow) candleGlow.classList.add('is-extinguished');
+    if (smokeGroup) smokeGroup.classList.add('is-active');
+
+    // 2. Dim background lighting briefly
+    if (dimOverlay) {
+      dimOverlay.classList.add('is-active');
+      setTimeout(() => {
+        dimOverlay.classList.remove('is-active');
+      }, 750);
+    }
+
+    // 3. Update button & instructions
+    blowBtn.classList.add('is-disabled');
+    if (blowBtnText) blowBtnText.textContent = 'Wish Made';
+    if (instructionEl) instructionEl.textContent = 'The candle has been blown. Your wish is on its way.';
+
+    const cakeUi = document.getElementById('cake-interactive-ui');
+    if (cakeUi) {
+      cakeUi.classList.add('is-faded-out');
+    }
+
+    // 4. Launch Confetti & Fireworks Burst
+    triggerConfettiFireworks();
+
+    // 5. Reveal Wish Card
+    setTimeout(() => {
+      if (wishCard) {
+        wishCard.classList.add('is-visible');
+      }
+    }, 450);
+  };
+
+  // Attach pointer events to both candle graphic & button
+  const targets = [cakeTrigger, blowBtn];
+  targets.forEach(el => {
+    el.addEventListener('pointerdown', startHolding);
+    el.addEventListener('mousedown', startHolding);
+    el.addEventListener('touchstart', startHolding, {passive: true});
+
+    el.addEventListener('pointerup', cancelHolding);
+    el.addEventListener('mouseup', cancelHolding);
+    el.addEventListener('touchend', cancelHolding);
+    
+    el.addEventListener('pointercancel', cancelHolding);
+    el.addEventListener('mouseleave', cancelHolding);
   });
 }

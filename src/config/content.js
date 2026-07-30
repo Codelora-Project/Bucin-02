@@ -22,7 +22,8 @@ export const CONFIG = {
     subtitle: "a love letter in bloom",
     title: "For You, My Everything",
     message: "Every petal holds a whisper of how much you mean to me.",
-    daysTogetherText: "1,259 days with you",
+    relationshipStartDate: "2023-02-14",
+    daysTogetherText: "together with you & counting every second",
     scrollHint: "Scroll down to explore your surprise"
   },
 
@@ -265,5 +266,16 @@ export const CONFIG = {
     message: "I hope today brings you as much happiness as you bring into my life every day. Loving you today, tomorrow, and always.",
     subtext: "Tap the button below to send a warm hug!",
     tombolPelukText: "Send Hugs & Love"
+  },
+
+  // 9. INTERACTIVE BIRTHDAY CAKE & BLOW THE CANDLE
+  birthdayCakeConfig: {
+    subtitle: "MAKE A WISH",
+    title: "Blow the Candle",
+    subtitleText: "Press and hold the candle flame to blow it out and make your wish",
+    instructionText: "Press and hold to blow out the candle",
+    buttonText: "Press & Hold to Blow Candle",
+    wishTitle: "Make a Wish, My Everything",
+    wishMessage: "May your days be filled with warmth, laughter, and endless joy. Loving you today, tomorrow, and always."
   }
 };

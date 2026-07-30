@@ -196,3 +196,55 @@
   .surprise-title { font-size: 1.2rem; }
   #greeting-card { padding: 2rem 1.5rem; }
 }
+
+/* Hero Live Real-Time Counter */
+.hero-live-counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 6px 0 4px 0;
+}
+
+.counter-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 42px;
+}
+
+.counter-unit span {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #7D3C3C;
+  background: linear-gradient(135deg, #7D3C3C 0%, #A67BB5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.counter-unit label {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+.counter-colon {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--rose-gold-primary);
+  margin-top: -10px;
+  opacity: 0.85;
+  animation: colonBlink 1.5s ease-in-out infinite;
+}
+
+@keyframes colonBlink {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 0.25; }
+}

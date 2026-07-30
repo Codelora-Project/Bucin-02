@@ -166,3 +166,58 @@ export function triggerCelebrationBurst() {
     }
   }, 1700);
 }
+
+/**
+ * Multi-color Birthday Fireworks & Confetti Rain Burst
+ */
+export function triggerConfettiFireworks() {
+  const container = document.createElement('div');
+  container.style.position = 'fixed';
+  container.style.inset = '0';
+  container.style.pointerEvents = 'none';
+  container.style.zIndex = '9998';
+  container.style.overflow = 'hidden';
+  document.body.appendChild(container);
+
+  const colors = ['#E89898', '#A67BB5', '#7D5A95', '#F5DFDF', '#FFAE42', '#FFF59D', '#E91E63'];
+  const confettiCount = 65;
+
+  for (let i = 0; i < confettiCount; i++) {
+    const confetti = document.createElement('div');
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const size = Math.random() * 8 + 6;
+    const isCircle = Math.random() > 0.5;
+
+    confetti.style.position = 'absolute';
+    confetti.style.width = `${size}px`;
+    confetti.style.height = isCircle ? `${size}px` : `${size * 1.8}px`;
+    confetti.style.backgroundColor = color;
+    confetti.style.borderRadius = isCircle ? '50%' : '2px';
+    confetti.style.left = `${Math.random() * 100}vw`;
+    confetti.style.top = '-20px';
+    confetti.style.opacity = (Math.random() * 0.5 + 0.5).toString();
+    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+    confetti.style.willChange = 'transform, opacity';
+    confetti.style.transition = `transform ${Math.random() * 2 + 2}s cubic-bezier(0.25, 1, 0.5, 1), opacity ${Math.random() * 1.5 + 1.5}s ease-out`;
+
+    container.appendChild(confetti);
+
+    const fallDistance = window.innerHeight + 60;
+    const swayDistance = (Math.random() - 0.5) * 200;
+    const rotation = Math.random() * 720;
+
+    requestAnimationFrame(() => {
+      confetti.style.transform = `translate3d(${swayDistance}px, ${fallDistance}px, 0) rotate(${rotation}deg)`;
+      confetti.style.opacity = '0';
+    });
+  }
+
+  // Also call standard celebration burst
+  triggerCelebrationBurst();
+
+  setTimeout(() => {
+    if (container.parentNode) {
+      container.parentNode.removeChild(container);
+    }
+  }, 3500);
+}
