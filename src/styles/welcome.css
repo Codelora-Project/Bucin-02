@@ -6,7 +6,7 @@
   position: fixed;
   inset: 0;
   z-index: 9998;
-  background: linear-gradient(160deg, #FBE8E8 0%, #F5CBCB 40%, #DDB8E8 75%, #C9A8DB 100%);
+  background: radial-gradient(circle at 50% 50%, #FAF0E6 0%, #FAF4EE 100%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -34,69 +34,88 @@
   padding: 20px;
 }
 
-/* Minimalist Blush Glass Card */
-.surprise-card {
-  background: rgba(248, 236, 236, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1.5px solid rgba(232, 152, 152, 0.5);
-  border-radius: 28px;
-  padding: 42px 40px 36px 40px;
-  max-width: 360px;
-  width: 100%;
-  box-shadow: 0 15px 40px rgba(125, 60, 60, 0.12), 0 0 25px rgba(232, 152, 152, 0.15);
-  transition: transform 0.35s cubic-bezier(0.25, 1, 0.35, 1), box-shadow 0.35s ease;
+/* STANDALONE GIFT BOX STYLING */
+.gift-box-wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-#initial-view:hover .surprise-card {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 20px 48px rgba(125, 60, 60, 0.18), 0 0 30px rgba(232, 152, 152, 0.25);
-}
-
-.surprise-icon-wrapper {
-  margin-bottom: 24px;
-  display: inline-flex;
-  align-items: center;
   justify-content: center;
-  width: 72px;
-  height: 72px;
+  cursor: pointer;
+  user-select: none;
+  padding: 20px;
+}
+
+.gift-box-container {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  animation: giftFloat 3.5s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes giftFloat {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-12px); }
+}
+
+.gift-lid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  transition: transform 0.2s ease;
+  filter: drop-shadow(0 4px 8px rgba(180, 100, 110, 0.25));
+}
+
+.gift-body {
+  position: relative;
+  z-index: 1;
+  margin-top: 26px;
+  filter: drop-shadow(0 8px 18px rgba(180, 100, 110, 0.3));
+}
+
+.gift-shadow {
+  width: 120px;
+  height: 18px;
+  background: rgba(180, 120, 130, 0.2);
   border-radius: 50%;
-  background: rgba(232, 152, 152, 0.2);
-  transition: transform 0.3s ease;
+  margin-top: 14px;
+  filter: blur(4px);
+  animation: shadowPulse 3.5s ease-in-out infinite alternate;
 }
 
-#initial-view:hover .surprise-icon-wrapper {
-  transform: scale(1.1) rotate(4deg);
+@keyframes shadowPulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(0.8); opacity: 0.3; }
 }
 
-.surprise-gift-svg {
-  filter: drop-shadow(0 2px 8px rgba(125, 60, 60, 0.2));
-}
-
-.surprise-title {
+.gift-hint-text {
   font-family: var(--font-sans);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: #7D3C3C;
-  margin-bottom: 10px;
-  line-height: 1.4;
-}
-
-.tap-hint {
-  font-family: var(--font-sans);
-  font-size: 0.85rem;
-  font-style: italic;
-  font-weight: 400;
   letter-spacing: 2.5px;
   text-transform: uppercase;
-  color: #7D3C3C;
-  opacity: 0.8;
-  animation: pulse 2s infinite ease-in-out;
+  color: #8C525E;
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: pulseText 2s infinite ease-in-out;
+}
+
+.hint-sparkle {
+  color: #D86B7D;
+  font-size: 0.95rem;
+}
+
+@keyframes pulseText {
+  0%, 100% { opacity: 0.95; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.98); }
 }
 
 /* FLOWER PARTICLES CONTAINER */

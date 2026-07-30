@@ -100,20 +100,47 @@
          1. WELCOME GATE (Flower Explosion)
          ==================================================================== -->
     <div id="welcome-gate" class="welcome-gate-overlay is-hidden">
-      <!-- INITIAL VIEW (GIFT BOX CARD) -->
+      <!-- INITIAL VIEW (INTERACTIVE STANDALONE GIFT BOX & LID) -->
       <div id="initial-view">
-        <div class="surprise-card">
-          <div class="surprise-icon-wrapper">
-            <svg class="surprise-gift-svg" width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="#7D3C3C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 12v10H4V12"/>
-              <path d="M2 7h20v5H2z"/>
-              <path d="M12 7v15"/>
-              <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
-              <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
-            </svg>
+        <div class="gift-box-wrapper">
+          <!-- Animated Gift Box Container -->
+          <div class="gift-box-container">
+            <!-- Separate Lid Element -->
+            <div class="gift-lid">
+              <svg width="150" height="46" viewBox="0 0 150 46" fill="none">
+                <!-- Lid Base Box -->
+                <rect x="3" y="12" width="144" height="30" rx="6" fill="#C85265" stroke="#FFFFFF" stroke-width="2.5"/>
+                <!-- Ribbon Horizontal -->
+                <rect x="63" y="12" width="24" height="30" fill="#F8D0D8"/>
+                <!-- Ribbon Bow Left Loop -->
+                <path d="M75 14 C52 -10, 24 2, 75 14 Z" fill="#F5A5B5" stroke="#FFFFFF" stroke-width="2"/>
+                <!-- Ribbon Bow Right Loop -->
+                <path d="M75 14 C98 -10, 126 2, 75 14 Z" fill="#F5A5B5" stroke="#FFFFFF" stroke-width="2"/>
+                <!-- Ribbon Knot Center -->
+                <circle cx="75" cy="14" r="6" fill="#D86B7D" stroke="#FFFFFF" stroke-width="2"/>
+              </svg>
+            </div>
+            
+            <!-- Gift Body Base -->
+            <div class="gift-body">
+              <svg width="134" height="118" viewBox="0 0 134 118" fill="none">
+                <!-- Box Body -->
+                <rect x="3" y="3" width="128" height="112" rx="8" fill="#D86B7D" stroke="#FFFFFF" stroke-width="2.5"/>
+                <!-- Vertical Ribbon -->
+                <rect x="55" y="3" width="24" height="112" fill="#F8D0D8"/>
+                <!-- Box Subtle Inner Highlight -->
+                <rect x="3" y="3" width="128" height="12" fill="rgba(255,255,255,0.22)"/>
+              </svg>
+            </div>
           </div>
-          <h2 class="surprise-title">A LITTLE BIRTHDAY SURPRISE</h2>
-          <p class="tap-hint">TAP ANYWHERE TO OPEN</p>
+
+          <!-- Soft Shadow Underneath -->
+          <div class="gift-shadow"></div>
+
+          <!-- Hint Caption -->
+          <div class="gift-hint-text">
+            <span class="hint-sparkle">✦</span> Sentuh Kado Untuk Membuka Kejutan <span class="hint-sparkle">✦</span>
+          </div>
         </div>
       </div>
 

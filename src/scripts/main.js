@@ -237,7 +237,7 @@ function setupWelcomeGate() {
     "/flowers/flower-4.png"
   ];
   const isMobile = window.innerWidth <= 600;
-  const TOTAL_FLOWERS = isMobile ? 90 : 380; // Optimized for 60fps on mobile devices
+  const TOTAL_FLOWERS = isMobile ? 140 : 360; // Dense screen coverage
 
   // Pre-create flower elements
   for (let i = 0; i < TOTAL_FLOWERS; i++) {
@@ -250,12 +250,10 @@ function setupWelcomeGate() {
     flower.style.backgroundRepeat = "no-repeat";
     flower.style.backgroundPosition = "center";
     
-    // Ukuran bunga disetting persis 75px - 190px
-    const randomSize = Math.random() * 115 + 75;
+    // Size settings for dense cover (65px - 170px)
+    const randomSize = Math.random() * 105 + 65;
     flower.style.width = randomSize + "px";
     flower.style.height = randomSize + "px";
-    
-    // Tambahkan sedikit z-index acak agar tumpukannya natural
     flower.style.zIndex = Math.floor(Math.random() * 100) + 10;
     
     flowerContainer.appendChild(flower);
@@ -267,97 +265,151 @@ function setupWelcomeGate() {
     isAnimating = true;
     triggerHaptic('success');
 
-    // Hilangkan background overlay welcome-gate LANGSUNG agar latar website utama & canvas langsung tampil 100%
-    welcomeGate.style.background = "transparent";
-    welcomeGate.style.backgroundColor = "transparent";
-    welcomeGate.style.zIndex = '5';
-    welcomeGate.style.pointerEvents = "none";
+    // Keep welcome-gate ON TOP during explosion
+    welcomeGate.style.zIndex = '9998';
 
-    // Tampilkan konten utama LANGSUNG dan tempatkan di Layer Depan (z-index: 20)
-    const mainContent = document.getElementById('main-content');
-    const appContainer = document.querySelector('.app-container');
-    if (mainContent) mainContent.style.display = 'block';
-    if (appContainer) {
-      appContainer.style.position = 'relative';
-      appContainer.style.zIndex = '20';
-    }
-    
-    // Putar audio & tampilkan widget musik langsung
-    if (audioCtrl) {
-      audioCtrl.showWidget();
-      audioCtrl.play();
-    }
-    initScrollReveal();
+    const flowers = document.querySelectorAll(".flower-particle");
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
 
-    // Check if gsap is loaded
-    if (typeof gsap === 'undefined') {
-      showMainContent();
-      return;
-    }
-
+    // Timeline GSAP
     const tl = gsap.timeline();
 
-    // Fade out initial view (kado)
-    tl.to(initialView, {
+    // 1. Fade out hint text quickly
+    tl.to('.gift-hint-text', {
       opacity: 0,
-      scale: 0.8,
-      duration: 0.3,
-      ease: "power2.inOut",
-      onComplete: () => {
-        initialView.style.display = "none";
-      }
+      y: 10,
+      duration: 0.2,
+      ease: "power1.out"
     });
 
-    // B. Flower Burst (CINEMATIC SLOW-MOTION GALAXY SPIRAL STYLE)
-    const flowers = document.querySelectorAll(".flower-particle");
-    const NUM_ARMS = 3; // 3 lengan spiral galaksi
-    
+    // 2. Wobble & Elastic Shake Gift Box Container (Stage 1)
+    tl.to('.gift-box-container', {
+      rotation: -10,
+      scaleY: 0.9,
+      duration: 0.07,
+      repeat: 5,
+      yoyo: true,
+      ease: "sine.inOut"
+    }, 0.1);
+
+    // 3. Pop Lid Upward & Spin 360° (Stage 2)
+    tl.to('.gift-lid', {
+      y: -160,
+      rotation: -360,
+      opacity: 0,
+      duration: 0.5,
+      ease: "back.out(1.4)"
+    }, 0.48);
+
+    // 4. Shrink/Fade Gift Body as flowers erupt (Stage 3)
+    tl.to('.gift-body, .gift-shadow', {
+      scale: 0,
+      opacity: 0,
+      duration: 0.35,
+      ease: "power2.in"
+    }, 0.68);
+
+    // 5. Flowers Fountain Spray out from inside open gift box to cover screen
+    const flowerTargets = [];
     flowers.forEach((flower, index) => {
-      // Tentukan bunga ini masuk ke lengan spiral yang mana (0, 1, atau 2)
-      const armIndex = index % NUM_ARMS;
-      // Posisi progress (0.0 hingga 1.0) bunga ini di sepanjang lengannya
-      const progress = Math.floor(index / NUM_ARMS) / (TOTAL_FLOWERS / NUM_ARMS);
+      // Screen coverage points
+      const targetX = (Math.random() - 0.5) * (viewportWidth * 1.35);
+      const targetY = (Math.random() - 0.5) * (viewportHeight * 1.35);
+      const randomRotation = Math.random() * 720 - 360;
+      const randomScale = Math.random() * 1.4 + 0.8;
       
-      // Sudut dasar lengan (terpisah 120 derajat) ditambah putaran spiral (3 putaran penuh)
-      const armOffset = (armIndex / NUM_ARMS) * Math.PI * 2;
-      const angle = armOffset + (progress * Math.PI * 2 * 3); 
-      
-      const maxDistance = Math.max(window.innerWidth, window.innerHeight) * 0.9; 
-      // Jarak melebar secara eksponensial kecil agar bentuk spiralnya padat di tengah dan renggang di luar
-      const distance = Math.pow(progress, 0.8) * maxDistance + 50; 
-      
-      const endX = Math.cos(angle) * distance;
-      const endY = Math.sin(angle) * distance;
-      
-      const randomRotation = Math.random() * 360 + 720; 
-      const randomScale = Math.random() * 1.5 + 1;
-      const duration = progress * 1.2 + 1.0; // Durasi meledak lebih lambat & anggun (1.0s - 2.2s)
+      const burstDelay = 0.55 + (index / TOTAL_FLOWERS) * 0.65;
+      const burstDuration = Math.random() * 0.4 + 0.6;
+
+      flowerTargets.push({ targetX, targetY, randomRotation });
 
       tl.to(flower, {
-        x: endX,
-        y: endY,
+        x: targetX,
+        y: targetY,
         rotation: randomRotation,
         scale: randomScale,
         opacity: 1,
-        duration: duration,
+        duration: burstDuration,
         ease: "power2.out"
-      }, progress * 1.0); // Stagger meledak bertahap & melayang halus
+      }, burstDelay);
+    });
+
+    // 6. AT FULL SCREEN COVERAGE (~1.4s): Reveal main content underneath & start audio
+    tl.call(() => {
+      const mainContent = document.getElementById('main-content');
+      if (mainContent) {
+        mainContent.style.display = 'block';
+        mainContent.style.opacity = '1';
+      }
       
-      // Setelah meledak, jatuh perlahan dan pudar secara santai
-      gsap.to(flower, {
-        y: endY + (Math.random() * 500 + 400),
+      if (audioCtrl) {
+        audioCtrl.showWidget();
+        audioCtrl.play();
+      }
+      initScrollReveal();
+
+      // Make welcomeGate background transparent so falling flowers overlay main content smoothly
+      welcomeGate.style.background = "transparent";
+      welcomeGate.style.backgroundColor = "transparent";
+    }, null, 1.4);
+
+    // Top-to-Bottom Staggered Reveal for Hero Elements (Curtain Unveil)
+    const heroElements = [
+      document.getElementById('hero-subtitle'),
+      document.getElementById('hero-title'),
+      document.getElementById('hero-message'),
+      document.querySelector('.hero-days-pill'),
+      document.getElementById('hero-scroll-btn')
+    ].filter(Boolean);
+
+    gsap.set(heroElements, { y: -45, opacity: 0 });
+
+    heroElements.forEach((el, index) => {
+      tl.to(el, {
+        y: 0,
+        opacity: 1,
+        duration: 0.75,
+        ease: "power2.out"
+      }, 1.5 + (index * 0.18));
+    });
+
+    // 7. FLOWERS FALL DOWNWARD WITH WIND SWAY (Left-Right Swaying Motion)
+    flowers.forEach((flower, index) => {
+      const target = flowerTargets[index];
+      const fallDelay = 1.55 + (Math.random() * 0.45);
+      const fallDuration = Math.random() * 1.2 + 2.0;
+
+      // Vertical falling motion
+      tl.to(flower, {
+        y: target.targetY + viewportHeight + 450,
+        rotation: target.randomRotation + (Math.random() * 360 - 180),
         opacity: 0,
-        rotation: randomRotation + 180,
-        duration: Math.random() * 2.0 + 2.5, // Durasi gugur 2.5s - 4.5s
-        ease: "power1.inOut",
-        delay: (progress * 1.0) + duration + 0.3
+        duration: fallDuration,
+        ease: "power1.in"
+      }, fallDelay);
+
+      // Horizontal wind sway (wobbling left and right as if blown by gentle breeze)
+      const swayOffset = Math.random() * 80 + 40;
+      const swayDirection = Math.random() > 0.5 ? 1 : -1;
+      const swayDuration = Math.random() * 0.25 + 0.45;
+
+      gsap.to(flower, {
+        x: target.targetX + (swayOffset * swayDirection),
+        duration: swayDuration,
+        repeat: 6,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: fallDelay
       });
     });
 
-    // Hapus welcome-gate sepenuhnya setelah ~6.0 detik (durasi sinematik santai)
-    setTimeout(() => {
+    // 8. Cleanup welcome-gate overlay
+    tl.call(() => {
       welcomeGate.classList.add('is-hidden');
-    }, 6000);
+      welcomeGate.style.pointerEvents = "none";
+      if (initialView) initialView.style.display = "none";
+    }, null, 4.2);
   });
 }
 
