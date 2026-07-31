@@ -301,7 +301,7 @@ function setupWelcomeGate() {
     const burstDuration = shotSpan + flowerFlightDuration * 1.12;
     const coverageTime = burstStart + burstDuration;
     const fallStart = coverageTime + (prefersReducedMotion ? 0.14 : 0.25);
-    const fallDuration = prefersReducedMotion ? 0.55 : 1.6;
+    const fallDuration = prefersReducedMotion ? 0.7 : (isMobile ? 2.8 : 3.2);
     const cleanupTime = fallStart + fallDuration + 0.1;
 
     // Timeline GSAP
@@ -385,9 +385,9 @@ function setupWelcomeGate() {
         scale: 0.88 + Math.random() * 0.28,
         launchAt: (index / Math.max(1, TOTAL_FLOWERS - 1)) * shotSpan,
         flightDuration: flowerFlightDuration * (0.88 + Math.random() * 0.24),
-        fallDelay: Math.random() * 0.16,
-        swayAmplitude: Math.random() * (isMobile ? 34 : 58) + (isMobile ? 20 : 30),
-        swayCycles: Math.random() * 1.2 + 1.8,
+        fallDelay: Math.random() * 0.2,
+        swayAmplitude: Math.random() * (isMobile ? 25 : 40) + (isMobile ? 18 : 28),
+        swayCycles: Math.random() * 0.65 + 1.05,
         swayDirection: Math.random() > 0.5 ? 1 : -1,
         fallRotation: Math.random() * 260 - 130
       };
