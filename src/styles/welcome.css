@@ -6,12 +6,27 @@
   position: fixed;
   inset: 0;
   z-index: 9998;
-  background: radial-gradient(circle at 50% 50%, #FAF0E6 0%, #FAF4EE 100%);
+  background: transparent;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
   transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.welcome-gate-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(circle at 50% 50%, #FAF0E6 0%, #FAF4EE 100%);
+  opacity: 1;
+  transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity;
+}
+
+.welcome-gate-overlay.is-revealing::before {
+  opacity: 0;
 }
 
 .welcome-gate-overlay.is-hidden {
@@ -127,17 +142,20 @@
   overflow: hidden;
 }
 
-.flower-particle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 60px;
-  height: 60px;
-  margin-top: -30px;
-  margin-left: -30px;
-  opacity: 0;
-  will-change: transform, opacity;
-  user-select: none;
+.flower-burst-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gift-box-container,
+  .gift-shadow,
+  .gift-hint-text {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+  }
 }
 
 /* GREETING CARD */

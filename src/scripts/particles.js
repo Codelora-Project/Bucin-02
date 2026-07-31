@@ -75,7 +75,11 @@ export function initParticleEngine() {
     ctx.restore();
   }
 
+  let isRunning = true;
+  let animationFrameId = null;
+
   function render() {
+    if (!isRunning) return;
     ctx.clearRect(0, 0, width, height);
 
     // Draw twinkling stars
@@ -111,10 +115,23 @@ export function initParticleEngine() {
       drawPetal(p);
     });
 
-    requestAnimationFrame(render);
+    animationFrameId = requestAnimationFrame(render);
   }
 
   render();
+
+  return {
+    pause() {
+      isRunning = false;
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+    },
+    resume() {
+      if (isRunning) return;
+      isRunning = true;
+      render();
+    }
+  };
 }
 
 /**

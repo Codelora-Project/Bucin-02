@@ -4,6 +4,7 @@ import { AudioController } from './audio.js';
 import { initScrollReveal } from './scrollReveal.js';
 
 let audioCtrl = null;
+let particleCtrl = null;
 let currentPinInput = '';
 
 /* Mobile Haptic Feedback Helper */
@@ -24,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPreloader();
 
   // Initialize canvas particle background
-  initParticleEngine();
+  particleCtrl = initParticleEngine();
 
   // Initialize live real-time relationship days counter
   initLiveDaysCounter();
@@ -58,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupBirthdayCake();
   setupClosingButton();
   setupScrollProgress();
+  initScrollReveal();
 });
 
 /* -1. Asset Preloader Manager */
@@ -237,43 +239,66 @@ function setupWelcomeGate() {
     "/flowers/flower-4.png"
   ];
   const isMobile = window.innerWidth <= 600;
-  const TOTAL_FLOWERS = isMobile ? 140 : 360; // Dense screen coverage
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hasLimitedHardware = (navigator.hardwareConcurrency || 4) <= 4 ||
+    (navigator.deviceMemory || 4) <= 4;
+  const TOTAL_FLOWERS = prefersReducedMotion
+    ? 48
+    : hasLimitedHardware
+      ? (isMobile ? 170 : 260)
+      : (isMobile ? 220 : 360);
 
-  // Pre-create flower elements
-  for (let i = 0; i < TOTAL_FLOWERS; i++) {
-    const flower = document.createElement("div");
-    flower.classList.add("flower-particle");
-    
-    const randomImage = flowerImages[Math.floor(Math.random() * flowerImages.length)];
-    flower.style.backgroundImage = `url('${randomImage}')`;
-    flower.style.backgroundSize = "contain";
-    flower.style.backgroundRepeat = "no-repeat";
-    flower.style.backgroundPosition = "center";
-    
-    // Size settings for dense cover (65px - 170px)
-    const randomSize = Math.random() * 105 + 65;
-    flower.style.width = randomSize + "px";
-    flower.style.height = randomSize + "px";
-    flower.style.zIndex = Math.floor(Math.random() * 100) + 10;
-    
-    flowerContainer.appendChild(flower);
+  // Hundreds of flowers share one canvas layer instead of hundreds of DOM/GPU layers.
+  const flowerCanvas = document.createElement('canvas');
+  flowerCanvas.className = 'flower-burst-canvas';
+  flowerContainer.appendChild(flowerCanvas);
+  const flowerCtx = flowerCanvas.getContext('2d', { alpha: true });
+  const flowerSprites = flowerImages.map(src => {
+    const image = new Image();
+    image.src = src;
+    return image;
+  });
+
+  function sizeFlowerCanvas() {
+    const dpr = Math.min(window.devicePixelRatio || 1, hasLimitedHardware ? 1 : 1.35);
+    flowerCanvas.width = Math.round(window.innerWidth * dpr);
+    flowerCanvas.height = Math.round(window.innerHeight * dpr);
+    flowerCanvas.style.width = `${window.innerWidth}px`;
+    flowerCanvas.style.height = `${window.innerHeight}px`;
+    flowerCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
+
+  sizeFlowerCanvas();
 
   // Handle Explosion
   initialView.addEventListener("click", () => {
     if (isAnimating) return;
     isAnimating = true;
     triggerHaptic('success');
+    particleCtrl?.pause();
+
+    // Start audio on the actual user gesture, away from the hero reveal frame.
+    if (audioCtrl) {
+      audioCtrl.showWidget();
+      audioCtrl.play();
+    }
 
     // Keep welcome-gate ON TOP during explosion
     welcomeGate.style.zIndex = '9998';
 
-    const flowers = document.querySelectorAll(".flower-particle");
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
+    const heroSection = document.querySelector('.hero-section');
+    const motionScale = prefersReducedMotion ? 0.55 : 1;
 
     // Timeline GSAP
     const tl = gsap.timeline();
+
+    // Hero has already been laid out and painted behind the opaque gate.
+    if (heroSection) {
+      gsap.set(heroSection, { opacity: 0, y: 18, scale: 0.985, force3D: true });
+      heroSection.classList.remove('hero-transition-pending');
+    }
 
     // 1. Hide hint text instantly upon click
     gsap.set('.gift-hint-text', {
@@ -285,116 +310,116 @@ function setupWelcomeGate() {
     tl.to('.gift-box-container', {
       rotation: -10,
       scaleY: 0.9,
-      duration: 0.07,
-      repeat: 5,
+      duration: 0.055 * motionScale,
+      repeat: prefersReducedMotion ? 1 : 4,
       yoyo: true,
       ease: "sine.inOut"
-    }, 0.1);
+    }, 0.05);
 
     // 3. Pop Lid Upward & Spin 360° (Stage 2)
     tl.to('.gift-lid', {
       y: -160,
       rotation: -360,
       opacity: 0,
-      duration: 0.5,
+      duration: 0.42 * motionScale,
       ease: "back.out(1.4)"
-    }, 0.48);
+    }, 0.3);
 
     // 4. Shrink/Fade Gift Body as flowers erupt (Stage 3)
     tl.to('.gift-body, .gift-shadow', {
       scale: 0,
       opacity: 0,
-      duration: 0.35,
+      duration: 0.28 * motionScale,
       ease: "power2.in"
-    }, 0.68);
+    }, 0.5);
 
-    // 5. Flowers Slow-Motion Dream + Gentle Swirl Fountain
-    const flowerTargets = [];
-    flowers.forEach((flower, index) => {
-      const targetX = (Math.random() - 0.5) * (viewportWidth * 1.35);
-      const targetY = (Math.random() - 0.5) * (viewportHeight * 1.35);
-      const randomRotation = Math.random() * 720 - 360;
-      const randomScale = Math.random() * 1.4 + 0.8;
-      
-      flowerTargets.push({ targetX, targetY, randomRotation });
-
-      // Opsi 1 & 2: Waktu sebar diperlama (0.55s - 3.05s) dan waktu melayang (2.5 - 4.0s)
-      const burstDelay = 0.55 + (index / TOTAL_FLOWERS) * 2.5; 
-      const flightDuration = Math.random() * 1.5 + 2.5; 
-
-      tl.to(flower, {
-        x: targetX,
-        y: targetY,
-        rotation: randomRotation + (Math.random() > 0.5 ? 720 : -720), // Ekstra putaran gemulai
-        scale: randomScale,
-        opacity: 1,
-        duration: flightDuration,
-        ease: "power1.out" // Sangat lembut dan melayang
-      }, burstDelay);
+    // 5. Build a dense canvas particle field.
+    const maxRadius = Math.hypot(viewportWidth, viewportHeight) * 0.58;
+    const flowerTargets = Array.from({ length: TOTAL_FLOWERS }, (_, index) => {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = maxRadius * (0.24 + Math.random() * 0.76);
+      return {
+        image: flowerSprites[index % flowerSprites.length],
+        x: Math.cos(angle) * radius,
+        y: Math.sin(angle) * radius,
+        rotation: Math.random() * 720 - 360,
+        size: Math.random() * (isMobile ? 72 : 105) + (isMobile ? 42 : 55),
+        scale: Math.random() * 0.75 + 0.72,
+        delay: Math.random() * 0.34,
+        drift: (Math.random() - 0.5) * 190
+      };
     });
 
-    // 6. AT FULL SCREEN COVERAGE (~4.0s): Reveal main content underneath & start audio
-    tl.call(() => {
-      const mainContent = document.getElementById('main-content');
-      if (mainContent) {
-        mainContent.style.display = 'block';
-        mainContent.style.opacity = '1';
-        mainContent.style.clipPath = 'inset(0% 0% 100% 0%)';
-      }
-      
-      if (audioCtrl) {
-        audioCtrl.showWidget();
-        audioCtrl.play();
-      }
-      initScrollReveal();
+    const canvasMotion = { burst: 0, fall: 0 };
+    const clamp01 = value => Math.max(0, Math.min(1, value));
+    const easeOutCubic = value => 1 - Math.pow(1 - value, 3);
 
-      welcomeGate.style.background = "transparent";
-      welcomeGate.style.backgroundColor = "transparent";
-    }, null, 4.0);
+    function drawFlowerBurst() {
+      flowerCtx.clearRect(0, 0, viewportWidth, viewportHeight);
+      const centerX = viewportWidth / 2;
+      const centerY = viewportHeight / 2;
 
-    // 7. Sync Curtain Reveal (Wipe effect matching falling flowers from top to bottom)
-    tl.to('#main-content', {
-      clipPath: 'inset(0% 0% 0% 0%)',
-      duration: 3.5, // Wipe super lambat
-      ease: "power1.in" 
-    }, 4.2);
+      flowerTargets.forEach(flower => {
+        if (!flower.image.complete || !flower.image.naturalWidth) return;
+        const localBurst = clamp01((canvasMotion.burst - flower.delay) / (1 - flower.delay));
+        if (localBurst <= 0) return;
+        const burstEase = easeOutCubic(localBurst);
+        const fallEase = canvasMotion.fall * canvasMotion.fall;
+        const x = centerX + flower.x * burstEase + flower.drift * fallEase;
+        const y = centerY + flower.y * burstEase + (viewportHeight + 260) * fallEase;
+        const rotation = (flower.rotation * burstEase + 150 * fallEase) * Math.PI / 180;
+        const scale = (0.2 + (flower.scale - 0.2) * burstEase) * (1 - fallEase * 0.08);
+        const opacity = Math.min(1, localBurst * 4) * (1 - fallEase);
+        const drawSize = flower.size * scale;
 
-    // 8. FLOWERS FALL DOWNWARD WITH WIND SWAY (Left-Right Swaying Motion)
-    flowers.forEach((flower, index) => {
-      const target = flowerTargets[index];
-      const fallDelay = 4.2 + (Math.random() * 1.0); // Mulai jatuh di detik 4.2
-      const fallDuration = Math.random() * 2.0 + 3.0; // Jatuh lambat
-
-      // Vertical falling motion
-      tl.to(flower, {
-        y: target.targetY + viewportHeight + 450,
-        rotation: target.randomRotation + (Math.random() * 360 - 180),
-        opacity: 0,
-        duration: fallDuration,
-        ease: "power1.in"
-      }, fallDelay);
-
-      // Horizontal wind sway (wobbling left and right as if blown by gentle breeze)
-      const swayOffset = Math.random() * 80 + 40;
-      const swayDirection = Math.random() > 0.5 ? 1 : -1;
-      const swayDuration = Math.random() * 0.25 + 0.45;
-
-      gsap.to(flower, {
-        x: target.targetX + (swayOffset * swayDirection),
-        duration: swayDuration,
-        repeat: 6,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: fallDelay
+        flowerCtx.save();
+        flowerCtx.globalAlpha = opacity;
+        flowerCtx.translate(x, y);
+        flowerCtx.rotate(rotation);
+        flowerCtx.drawImage(flower.image, -drawSize / 2, -drawSize / 2, drawSize, drawSize);
+        flowerCtx.restore();
       });
-    });
+    }
 
-    // 9. Cleanup welcome-gate overlay
+    tl.to(canvasMotion, {
+      burst: 1,
+      duration: prefersReducedMotion ? 0.62 : 1.18,
+      ease: 'none',
+      onUpdate: drawFlowerBurst
+    }, 0.42);
+
+    // 6. Crossfade the hero behind the flower foreground mask.
+    tl.call(() => {
+      welcomeGate.classList.add('is-revealing');
+    }, null, prefersReducedMotion ? 0.62 : 0.95);
+
+    if (heroSection) {
+      tl.to(heroSection, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: prefersReducedMotion ? 0.45 : 0.9,
+        ease: "power3.out"
+      }, prefersReducedMotion ? 0.62 : 0.95);
+    }
+
+    // 7. The dense field falls as one canvas redraw loop.
+    tl.to(canvasMotion, {
+      fall: 1,
+      duration: prefersReducedMotion ? 0.5 : 1.25,
+      ease: 'none',
+      onUpdate: drawFlowerBurst
+    }, prefersReducedMotion ? 1.0 : 1.55);
+
+    // 8. Cleanup quickly so promoted flower layers do not linger in GPU memory.
     tl.call(() => {
       welcomeGate.classList.add('is-hidden');
       welcomeGate.style.pointerEvents = "none";
       if (initialView) initialView.style.display = "none";
-    }, null, 9.0);
+      flowerContainer.replaceChildren();
+      document.body.classList.remove('gate-active');
+      particleCtrl?.resume();
+    }, null, prefersReducedMotion ? 1.65 : 3.05);
   });
 }
 

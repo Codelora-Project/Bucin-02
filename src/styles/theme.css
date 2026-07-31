@@ -89,6 +89,10 @@ body {
   width: 100%;
 }
 
+body.gate-active {
+  overflow: hidden;
+}
+
 /* Background Canvas for Starry Night & Falling Petals Particles */
 #particles-canvas {
   position: fixed;
@@ -214,6 +218,17 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.hero-section.hero-transition-pending {
+  opacity: 0;
+  transform: translateY(18px) scale(0.985);
+}
+
+/* Keep the long page out of the first-transition paint budget. */
+.section-container:not(.hero-section) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 100dvh;
 }
 
 .hero-message {
