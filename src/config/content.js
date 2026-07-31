@@ -11,7 +11,7 @@ export const CONFIG = {
   pinGateConfig: {
     pinCode: "2628",
     title: "For You, My Love",
-    subtitle: "Enter our 4-digit secret code to unlock your birthday surprise",
+    subtitle: "Enter our 4-digit secret code to unlock your National Girlfriend Day surprise",
     hint: "Hint: Our special date (Default PIN: 2628)"
   },
 
@@ -165,7 +165,7 @@ export const CONFIG = {
       id: 6,
       stepNumber: "06",
       date: "Today",
-      title: "Your Special Birthday",
+      title: "Happy National Girlfriend Day",
       description: "Celebrating you today and looking forward to all the chapters yet to come."
     }
   ],
@@ -173,10 +173,10 @@ export const CONFIG = {
   // 4. LOVE LETTER
   loveLetter: {
     title: "A Letter For You",
-    subtitle: "On Your Birthday",
+    subtitle: "On National Girlfriend Day",
     salutation: "Dearest Adinda,",
     paragraphs: [
-      "Happy birthday! I wanted to put together something truly personal for you today to celebrate the person you are.",
+      "Happy National Girlfriend Day! I wanted to put together something truly personal for you today to celebrate the person you are.",
       
       "Looking back at all our favorite memories, I'm constantly reminded of how lucky I am to share life with you. From late-night conversations to simple everyday moments, everything feels warmer with you.",
       
@@ -262,7 +262,7 @@ export const CONFIG = {
 
   // 8. CLOSING SECTION & WISHES
   pesanPenutup: {
-    title: "Happy Birthday, Adinda!",
+    title: "Happy National Girlfriend Day, Adinda!",
     message: "I hope today brings you as much happiness as you bring into my life every day. Loving you today, tomorrow, and always.",
     subtext: "Tap the button below to send a warm hug!",
     tombolPelukText: "Send Hugs & Love"

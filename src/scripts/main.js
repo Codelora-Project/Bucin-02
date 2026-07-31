@@ -243,16 +243,19 @@ function setupWelcomeGate() {
   const hasLimitedHardware = (navigator.hardwareConcurrency || 4) <= 4 ||
     (navigator.deviceMemory || 4) <= 4;
   const TOTAL_FLOWERS = prefersReducedMotion
-    ? 48
+    ? 42
     : hasLimitedHardware
-      ? (isMobile ? 170 : 260)
-      : (isMobile ? 220 : 360);
+      ? (isMobile ? 120 : 150)
+      : (isMobile ? 150 : 180);
 
-  // Hundreds of flowers share one canvas layer instead of hundreds of DOM/GPU layers.
-  const flowerCanvas = document.createElement('canvas');
-  flowerCanvas.className = 'flower-burst-canvas';
-  flowerContainer.appendChild(flowerCanvas);
-  const flowerCtx = flowerCanvas.getContext('2d', { alpha: true });
+  // Two canvas layers let some flowers pass behind the box and others cross in front.
+  const flowerBackCanvas = document.createElement('canvas');
+  const flowerFrontCanvas = document.createElement('canvas');
+  flowerBackCanvas.className = 'flower-burst-canvas is-back';
+  flowerFrontCanvas.className = 'flower-burst-canvas is-front';
+  flowerContainer.append(flowerBackCanvas, flowerFrontCanvas);
+  const flowerBackCtx = flowerBackCanvas.getContext('2d', { alpha: true });
+  const flowerFrontCtx = flowerFrontCanvas.getContext('2d', { alpha: true });
   const flowerSprites = flowerImages.map(src => {
     const image = new Image();
     image.src = src;
@@ -261,11 +264,14 @@ function setupWelcomeGate() {
 
   function sizeFlowerCanvas() {
     const dpr = Math.min(window.devicePixelRatio || 1, hasLimitedHardware ? 1 : 1.35);
-    flowerCanvas.width = Math.round(window.innerWidth * dpr);
-    flowerCanvas.height = Math.round(window.innerHeight * dpr);
-    flowerCanvas.style.width = `${window.innerWidth}px`;
-    flowerCanvas.style.height = `${window.innerHeight}px`;
-    flowerCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    [flowerBackCanvas, flowerFrontCanvas].forEach(canvas => {
+      canvas.width = Math.round(window.innerWidth * dpr);
+      canvas.height = Math.round(window.innerHeight * dpr);
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+    });
+    flowerBackCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    flowerFrontCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
   sizeFlowerCanvas();
@@ -289,6 +295,14 @@ function setupWelcomeGate() {
     const viewportHeight = window.innerHeight;
     const heroSection = document.querySelector('.hero-section');
     const motionScale = prefersReducedMotion ? 0.55 : 1;
+    const burstStart = 0.38;
+    const shotSpan = prefersReducedMotion ? 0.42 : 2.2;
+    const flowerFlightDuration = prefersReducedMotion ? 0.46 : 0.78;
+    const burstDuration = shotSpan + flowerFlightDuration * 1.12;
+    const coverageTime = burstStart + burstDuration;
+    const fallStart = coverageTime + (prefersReducedMotion ? 0.14 : 0.25);
+    const fallDuration = prefersReducedMotion ? 0.55 : 1.6;
+    const cleanupTime = fallStart + fallDuration + 0.1;
 
     // Timeline GSAP
     const tl = gsap.timeline();
@@ -324,13 +338,26 @@ function setupWelcomeGate() {
       ease: "back.out(1.4)"
     }, 0.3);
 
-    // 4. Shrink/Fade Gift Body as flowers erupt (Stage 3)
+    // 4. Give the open box a small recoil while it fires.
+    if (!prefersReducedMotion) {
+      tl.to('.gift-body', {
+        scaleX: 0.94,
+        scaleY: 0.9,
+        duration: 0.11,
+        repeat: 11,
+        yoyo: true,
+        ease: 'sine.inOut'
+      }, burstStart);
+    }
+
+    // Sink the box behind the flowers after roughly 65% of the shots have fired.
     tl.to('.gift-body, .gift-shadow', {
       scale: 0,
+      y: 30,
       opacity: 0,
-      duration: 0.28 * motionScale,
-      ease: "power2.in"
-    }, 0.5);
+      duration: 0.36 * motionScale,
+      ease: "power2.inOut"
+    }, burstStart + shotSpan * 0.65);
 
     // 5. Build a dense target grid so the rapid-fire volley covers every screen zone.
     const gridColumns = isMobile ? 6 : 10;
@@ -346,25 +373,23 @@ function setupWelcomeGate() {
       const row = Math.floor(cellIndex / gridColumns);
       const targetX = (column + 0.5) * cellWidth + (Math.random() - 0.5) * cellWidth * 0.52;
       const targetY = (row + 0.5) * cellHeight + (Math.random() - 0.5) * cellHeight * 0.52;
-      const volley = index % 7;
-      const distanceFromCenter = Math.hypot(
-        targetX - viewportWidth / 2,
-        targetY - viewportHeight / 2
-      );
-      const maxCenterDistance = Math.hypot(viewportWidth / 2, viewportHeight / 2);
+      const launchOriginY = viewportHeight / 2 - (isMobile ? 42 : 48);
 
       return {
         image: flowerSprites[index % flowerSprites.length],
+        foreground: index % 4 === 0,
         x: targetX - viewportWidth / 2,
-        y: targetY - viewportHeight / 2,
+        y: targetY - launchOriginY,
         rotation: Math.random() * 180 - 90,
         size: cellDiagonal * (0.88 + Math.random() * 0.34),
         scale: 0.88 + Math.random() * 0.28,
-        delay: volley * 0.065 + Math.random() * 0.025,
-        exitX: (targetX < viewportWidth / 2 ? -1 : 1) *
-          (viewportWidth * 0.28 + Math.random() * viewportWidth * 0.18),
-        // Flowers nearest the middle open first, forming a curtain around the hero.
-        fallDelay: (distanceFromCenter / maxCenterDistance) * 0.24
+        launchAt: (index / Math.max(1, TOTAL_FLOWERS - 1)) * shotSpan,
+        flightDuration: flowerFlightDuration * (0.88 + Math.random() * 0.24),
+        fallDelay: Math.random() * 0.16,
+        swayAmplitude: Math.random() * (isMobile ? 34 : 58) + (isMobile ? 20 : 30),
+        swayCycles: Math.random() * 1.2 + 1.8,
+        swayDirection: Math.random() > 0.5 ? 1 : -1,
+        fallRotation: Math.random() * 260 - 130
       };
     });
 
@@ -373,44 +398,51 @@ function setupWelcomeGate() {
     const easeOutCubic = value => 1 - Math.pow(1 - value, 3);
 
     function drawFlowerBurst() {
-      flowerCtx.clearRect(0, 0, viewportWidth, viewportHeight);
+      flowerBackCtx.clearRect(0, 0, viewportWidth, viewportHeight);
+      flowerFrontCtx.clearRect(0, 0, viewportWidth, viewportHeight);
       const centerX = viewportWidth / 2;
-      const centerY = viewportHeight / 2;
+      const centerY = viewportHeight / 2 - (isMobile ? 42 : 48);
 
       flowerTargets.forEach(flower => {
         if (!flower.image.complete || !flower.image.naturalWidth) return;
-        const localBurst = clamp01((canvasMotion.burst - flower.delay) / (1 - flower.delay));
+        const localBurst = clamp01(
+          (canvasMotion.burst - flower.launchAt) / flower.flightDuration
+        );
         if (localBurst <= 0) return;
         const burstEase = easeOutCubic(localBurst);
         const localFall = clamp01((canvasMotion.fall - flower.fallDelay) / (1 - flower.fallDelay));
         const fallEase = localFall * localFall;
-        const x = centerX + flower.x * burstEase + flower.exitX * fallEase;
+        const swayEnvelope = Math.sin(localFall * Math.PI);
+        const sway = Math.sin(localFall * Math.PI * 2 * flower.swayCycles) *
+          flower.swayAmplitude * flower.swayDirection * swayEnvelope;
+        const x = centerX + flower.x * burstEase + sway;
         const y = centerY + flower.y * burstEase + (viewportHeight + 260) * fallEase;
-        const rotation = (flower.rotation * burstEase + 120 * fallEase) * Math.PI / 180;
+        const rotation = (flower.rotation * burstEase + flower.fallRotation * localFall) * Math.PI / 180;
         const scale = (0.16 + (flower.scale - 0.16) * burstEase) * (1 - fallEase * 0.08);
         const opacity = Math.min(1, localBurst * 5) * (1 - fallEase);
         const drawSize = flower.size * scale;
 
-        flowerCtx.save();
-        flowerCtx.globalAlpha = opacity;
-        flowerCtx.translate(x, y);
-        flowerCtx.rotate(rotation);
-        flowerCtx.drawImage(flower.image, -drawSize / 2, -drawSize / 2, drawSize, drawSize);
-        flowerCtx.restore();
+        const ctx = flower.foreground ? flowerFrontCtx : flowerBackCtx;
+        ctx.save();
+        ctx.globalAlpha = opacity;
+        ctx.translate(x, y);
+        ctx.rotate(rotation);
+        ctx.drawImage(flower.image, -drawSize / 2, -drawSize / 2, drawSize, drawSize);
+        ctx.restore();
       });
     }
 
     tl.to(canvasMotion, {
-      burst: 1,
-      duration: prefersReducedMotion ? 0.62 : 1.02,
+      burst: burstDuration,
+      duration: burstDuration,
       ease: 'none',
       onUpdate: drawFlowerBurst
-    }, 0.38);
+    }, burstStart);
 
     // 6. Crossfade the hero behind the flower foreground mask.
     tl.call(() => {
       welcomeGate.classList.add('is-revealing');
-    }, null, prefersReducedMotion ? 0.72 : 1.38);
+    }, null, coverageTime);
 
     if (heroSection) {
       tl.to(heroSection, {
@@ -419,16 +451,16 @@ function setupWelcomeGate() {
         scale: 1,
         duration: prefersReducedMotion ? 0.45 : 0.9,
         ease: "power3.out"
-      }, prefersReducedMotion ? 0.72 : 1.38);
+      }, coverageTime);
     }
 
-    // 7. The dense field falls as one canvas redraw loop.
+    // 7. The dense field falls downward with a gentle left-right wind sway.
     tl.to(canvasMotion, {
       fall: 1,
-      duration: prefersReducedMotion ? 0.5 : 1.25,
+      duration: fallDuration,
       ease: 'none',
       onUpdate: drawFlowerBurst
-    }, prefersReducedMotion ? 1.12 : 1.75);
+    }, fallStart);
 
     // 8. Cleanup quickly so promoted flower layers do not linger in GPU memory.
     tl.call(() => {
@@ -439,7 +471,7 @@ function setupWelcomeGate() {
       document.body.classList.remove('gate-active');
       particleCtrl?.resume();
       audioCtrl?.showWidget();
-    }, null, prefersReducedMotion ? 1.75 : 3.1);
+    }, null, cleanupTime);
   });
 }
 
