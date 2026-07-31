@@ -279,7 +279,6 @@ function setupWelcomeGate() {
 
     // Start audio on the actual user gesture, away from the hero reveal frame.
     if (audioCtrl) {
-      audioCtrl.showWidget();
       audioCtrl.play();
     }
 
@@ -333,20 +332,39 @@ function setupWelcomeGate() {
       ease: "power2.in"
     }, 0.5);
 
-    // 5. Build a dense canvas particle field.
-    const maxRadius = Math.hypot(viewportWidth, viewportHeight) * 0.58;
+    // 5. Build a dense target grid so the rapid-fire volley covers every screen zone.
+    const gridColumns = isMobile ? 6 : 10;
+    const gridRows = isMobile ? 10 : 6;
+    const gridCellCount = gridColumns * gridRows;
+    const cellWidth = viewportWidth / gridColumns;
+    const cellHeight = viewportHeight / gridRows;
+    const cellDiagonal = Math.hypot(cellWidth, cellHeight);
     const flowerTargets = Array.from({ length: TOTAL_FLOWERS }, (_, index) => {
-      const angle = Math.random() * Math.PI * 2;
-      const radius = maxRadius * (0.24 + Math.random() * 0.76);
+      // 37 is coprime to the 60-cell grid, distributing consecutive shots across the screen.
+      const cellIndex = (index * 37) % gridCellCount;
+      const column = cellIndex % gridColumns;
+      const row = Math.floor(cellIndex / gridColumns);
+      const targetX = (column + 0.5) * cellWidth + (Math.random() - 0.5) * cellWidth * 0.52;
+      const targetY = (row + 0.5) * cellHeight + (Math.random() - 0.5) * cellHeight * 0.52;
+      const volley = index % 7;
+      const distanceFromCenter = Math.hypot(
+        targetX - viewportWidth / 2,
+        targetY - viewportHeight / 2
+      );
+      const maxCenterDistance = Math.hypot(viewportWidth / 2, viewportHeight / 2);
+
       return {
         image: flowerSprites[index % flowerSprites.length],
-        x: Math.cos(angle) * radius,
-        y: Math.sin(angle) * radius,
-        rotation: Math.random() * 720 - 360,
-        size: Math.random() * (isMobile ? 72 : 105) + (isMobile ? 42 : 55),
-        scale: Math.random() * 0.75 + 0.72,
-        delay: Math.random() * 0.34,
-        drift: (Math.random() - 0.5) * 190
+        x: targetX - viewportWidth / 2,
+        y: targetY - viewportHeight / 2,
+        rotation: Math.random() * 180 - 90,
+        size: cellDiagonal * (0.88 + Math.random() * 0.34),
+        scale: 0.88 + Math.random() * 0.28,
+        delay: volley * 0.065 + Math.random() * 0.025,
+        exitX: (targetX < viewportWidth / 2 ? -1 : 1) *
+          (viewportWidth * 0.28 + Math.random() * viewportWidth * 0.18),
+        // Flowers nearest the middle open first, forming a curtain around the hero.
+        fallDelay: (distanceFromCenter / maxCenterDistance) * 0.24
       };
     });
 
@@ -364,12 +382,13 @@ function setupWelcomeGate() {
         const localBurst = clamp01((canvasMotion.burst - flower.delay) / (1 - flower.delay));
         if (localBurst <= 0) return;
         const burstEase = easeOutCubic(localBurst);
-        const fallEase = canvasMotion.fall * canvasMotion.fall;
-        const x = centerX + flower.x * burstEase + flower.drift * fallEase;
+        const localFall = clamp01((canvasMotion.fall - flower.fallDelay) / (1 - flower.fallDelay));
+        const fallEase = localFall * localFall;
+        const x = centerX + flower.x * burstEase + flower.exitX * fallEase;
         const y = centerY + flower.y * burstEase + (viewportHeight + 260) * fallEase;
-        const rotation = (flower.rotation * burstEase + 150 * fallEase) * Math.PI / 180;
-        const scale = (0.2 + (flower.scale - 0.2) * burstEase) * (1 - fallEase * 0.08);
-        const opacity = Math.min(1, localBurst * 4) * (1 - fallEase);
+        const rotation = (flower.rotation * burstEase + 120 * fallEase) * Math.PI / 180;
+        const scale = (0.16 + (flower.scale - 0.16) * burstEase) * (1 - fallEase * 0.08);
+        const opacity = Math.min(1, localBurst * 5) * (1 - fallEase);
         const drawSize = flower.size * scale;
 
         flowerCtx.save();
@@ -383,15 +402,15 @@ function setupWelcomeGate() {
 
     tl.to(canvasMotion, {
       burst: 1,
-      duration: prefersReducedMotion ? 0.62 : 1.18,
+      duration: prefersReducedMotion ? 0.62 : 1.02,
       ease: 'none',
       onUpdate: drawFlowerBurst
-    }, 0.42);
+    }, 0.38);
 
     // 6. Crossfade the hero behind the flower foreground mask.
     tl.call(() => {
       welcomeGate.classList.add('is-revealing');
-    }, null, prefersReducedMotion ? 0.62 : 0.95);
+    }, null, prefersReducedMotion ? 0.72 : 1.38);
 
     if (heroSection) {
       tl.to(heroSection, {
@@ -400,7 +419,7 @@ function setupWelcomeGate() {
         scale: 1,
         duration: prefersReducedMotion ? 0.45 : 0.9,
         ease: "power3.out"
-      }, prefersReducedMotion ? 0.62 : 0.95);
+      }, prefersReducedMotion ? 0.72 : 1.38);
     }
 
     // 7. The dense field falls as one canvas redraw loop.
@@ -409,7 +428,7 @@ function setupWelcomeGate() {
       duration: prefersReducedMotion ? 0.5 : 1.25,
       ease: 'none',
       onUpdate: drawFlowerBurst
-    }, prefersReducedMotion ? 1.0 : 1.55);
+    }, prefersReducedMotion ? 1.12 : 1.75);
 
     // 8. Cleanup quickly so promoted flower layers do not linger in GPU memory.
     tl.call(() => {
@@ -419,7 +438,8 @@ function setupWelcomeGate() {
       flowerContainer.replaceChildren();
       document.body.classList.remove('gate-active');
       particleCtrl?.resume();
-    }, null, prefersReducedMotion ? 1.65 : 3.05);
+      audioCtrl?.showWidget();
+    }, null, prefersReducedMotion ? 1.75 : 3.1);
   });
 }
 
