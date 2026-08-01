@@ -248,10 +248,13 @@
         </div>
 
         <div id="origami-letter-container" class="origami-letter-container reveal-on-scroll">
-          <!-- 3D Vintage Envelope Card Wrapper -->
+          <!-- Layered Envelope Card Wrapper -->
           <div id="origami-envelope-card" class="origami-envelope-card">
-            
-            <!-- 3D Rotating Top Flap -->
+
+            <!-- Fixed-height envelope surface; separated so it can fade without affecting the letter -->
+            <div class="envelope-shell-surface" aria-hidden="true"></div>
+
+            <!-- Collapsing Top Flap -->
             <div class="envelope-flap-top">
               <svg class="flap-svg" viewBox="0 0 500 200" preserveAspectRatio="none">
                 <polygon points="0,0 500,0 250,190" fill="url(#flapGrad)"/>

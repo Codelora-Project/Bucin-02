@@ -591,30 +591,276 @@ function setupOrigamiLetter() {
   const envelopeCard = document.getElementById('origami-envelope-card');
   const waxSealBtn = document.getElementById('wax-seal-btn');
   const refoldBtn = document.getElementById('refold-letter-btn');
+  const envelopeSurface = envelopeCard?.querySelector('.envelope-shell-surface');
+  const envelopeFlap = envelopeCard?.querySelector('.envelope-flap-top');
+  const envelopePocket = envelopeCard?.querySelector('.envelope-pocket-front');
+  const letterPaper = document.getElementById('letter-paper');
 
-  if (!envelopeCard || !waxSealBtn) return;
+  if (!envelopeCard || !waxSealBtn || !envelopeSurface || !envelopeFlap ||
+    !envelopePocket || !letterPaper) return;
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const letterContent = [
+    letterPaper.querySelector('.letter-header'),
+    letterPaper.querySelector('.letter-salutation'),
+    ...letterPaper.querySelectorAll('.letter-paragraph'),
+    letterPaper.querySelector('.letter-footer')
+  ].filter(Boolean);
+  let isOpen = false;
+  let isAnimating = false;
+
+  waxSealBtn.setAttribute('aria-expanded', 'false');
+  waxSealBtn.setAttribute('aria-controls', 'letter-paper');
+  letterPaper.setAttribute('aria-hidden', 'true');
+  letterPaper.setAttribute('inert', '');
+
+  gsap.set(envelopeFlap, {
+    scaleY: 1,
+    y: 0,
+    opacity: 1,
+    transformOrigin: '50% 0%'
+  });
+  gsap.set(waxSealBtn, {
+    x: 0,
+    y: 0,
+    xPercent: -50,
+    yPercent: -50,
+    scale: 1,
+    rotation: 0,
+    opacity: 1
+  });
+  gsap.set([envelopeSurface, envelopePocket], { y: 0, scale: 1, opacity: 1 });
+  gsap.set(letterPaper, { height: 0, y: 72, scale: 0.965, opacity: 0 });
+  gsap.set(letterContent, { opacity: 0, y: 18 });
+
+  const getPaperHeights = () => {
+    const fullHeight = letterPaper.scrollHeight;
+    const previewHeight = Math.min(fullHeight, Math.max(190, Math.min(260, window.innerHeight * 0.3)));
+    return { fullHeight, previewHeight };
+  };
+
+  waxSealBtn.addEventListener('pointerenter', () => {
+    if (isOpen || isAnimating) return;
+    gsap.to(waxSealBtn, { scale: 1.1, rotation: 6, duration: 0.28, ease: 'power2.out' });
+  });
+
+  waxSealBtn.addEventListener('pointerleave', () => {
+    if (isOpen || isAnimating) return;
+    gsap.to(waxSealBtn, { scale: 1, rotation: 0, duration: 0.28, ease: 'power2.out' });
+  });
 
   const openLetter = () => {
-    triggerHaptic('medium');
-    envelopeCard.classList.add('is-open');
+    if (isOpen || isAnimating) return;
 
-    // Trigger paragraph reveal inside letter smoothly as paper unfolds
-    setTimeout(() => {
-      const paragraphs = document.querySelectorAll('.letter-paragraph');
-      paragraphs.forEach((p, idx) => {
-        setTimeout(() => {
-          p.classList.add('is-visible');
-        }, idx * 280);
-      });
-    }, 600);
+    triggerHaptic('medium');
+    isAnimating = true;
+    envelopeCard.classList.add('is-animating');
+    envelopeCard.style.overflow = 'visible';
+    waxSealBtn.setAttribute('aria-expanded', 'true');
+    letterPaper.setAttribute('aria-hidden', 'false');
+    letterPaper.removeAttribute('inert');
+
+    const { fullHeight, previewHeight } = getPaperHeights();
+    const timeline = gsap.timeline({
+      defaults: { overwrite: 'auto' },
+      onComplete: () => {
+        gsap.set(letterPaper, { height: 'auto' });
+        envelopeCard.classList.remove('is-animating');
+        envelopeCard.classList.add('is-open');
+        isAnimating = false;
+        isOpen = true;
+      }
+    });
+
+    if (prefersReducedMotion) {
+      timeline
+        .set(waxSealBtn, { opacity: 0 })
+        .set(envelopeFlap, { scaleY: 0, y: -8, opacity: 0 })
+        .set([envelopePocket, envelopeSurface], { opacity: 0 })
+        .to(letterPaper, {
+          height: fullHeight,
+          y: 0,
+          scale: 1,
+          opacity: 1,
+          duration: 0.24,
+          ease: 'power1.out'
+        })
+        .to(letterContent, { opacity: 1, y: 0, duration: 0.18 }, 0.08);
+      return;
+    }
+
+    timeline
+      // Press and release the seal before it breaks away.
+      .to(envelopeCard, { y: 3, duration: 0.12, ease: 'power1.inOut' }, 0)
+      .to(waxSealBtn, { scale: 0.92, duration: 0.12, ease: 'power2.in' }, 0)
+      .to(waxSealBtn, {
+        scale: 1.18,
+        rotation: -9,
+        duration: 0.16,
+        ease: 'back.out(2)'
+      }, 0.12)
+      .to(waxSealBtn, {
+        scale: 0.24,
+        rotation: 20,
+        opacity: 0,
+        duration: 0.24,
+        ease: 'power2.in'
+      }, 0.26)
+      // Collapse the flap toward its hinge without projecting outside the envelope.
+      .to(envelopeFlap, {
+        scaleY: 0.12,
+        y: -4,
+        opacity: 0.68,
+        duration: 0.42,
+        ease: 'power2.inOut'
+      }, 0.22)
+      .to(envelopeFlap, {
+        scaleY: 0,
+        y: -8,
+        opacity: 0,
+        duration: 0.16,
+        ease: 'power2.in'
+      }, 0.6)
+      .set(envelopeFlap, { zIndex: 2 }, 0.76)
+      // Pull a short portion of paper out while the front pocket is still visible.
+      .to(letterPaper, {
+        height: previewHeight,
+        y: -18,
+        scale: 0.985,
+        opacity: 1,
+        duration: 0.54,
+        ease: 'power3.out'
+      }, 0.62)
+      .to(envelopePocket, {
+        y: 18,
+        opacity: 0,
+        duration: 0.38,
+        ease: 'power2.in'
+      }, 0.9)
+      .to(envelopeSurface, {
+        y: 18,
+        scale: 0.985,
+        opacity: 0,
+        duration: 0.42,
+        ease: 'power2.in'
+      }, 0.98)
+      // Expand to the measured content height instead of an arbitrary max-height.
+      .to(letterPaper, {
+        height: fullHeight,
+        y: 0,
+        scale: 1,
+        duration: 0.78,
+        ease: 'power3.inOut'
+      }, 1.16)
+      .to(envelopeCard, { y: 0, duration: 0.4, ease: 'power2.out' }, 1.08)
+      .to(letterContent, {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        stagger: 0.09,
+        ease: 'power2.out'
+      }, 1.36);
   };
 
   const foldLetterBack = (e) => {
     e.stopPropagation();
+    if (!isOpen || isAnimating) return;
+
     triggerHaptic('light');
+    isAnimating = true;
+    isOpen = false;
     envelopeCard.classList.remove('is-open');
-    const paragraphs = document.querySelectorAll('.letter-paragraph');
-    paragraphs.forEach(p => p.classList.remove('is-visible'));
+    envelopeCard.classList.add('is-animating');
+    waxSealBtn.setAttribute('aria-expanded', 'false');
+
+    const { previewHeight } = getPaperHeights();
+    gsap.set(letterPaper, { height: letterPaper.getBoundingClientRect().height });
+
+    const timeline = gsap.timeline({
+      defaults: { overwrite: 'auto' },
+      onComplete: () => {
+        envelopeCard.classList.remove('is-animating');
+        envelopeCard.style.overflow = 'hidden';
+        letterPaper.setAttribute('aria-hidden', 'true');
+        letterPaper.setAttribute('inert', '');
+        isAnimating = false;
+      }
+    });
+
+    if (prefersReducedMotion) {
+      timeline
+        .to(letterContent, { opacity: 0, y: 18, duration: 0.12 })
+        .to(letterPaper, {
+          height: 0,
+          y: 72,
+          scale: 0.965,
+          opacity: 0,
+          duration: 0.22,
+          ease: 'power1.in'
+        }, 0)
+        .set([envelopeSurface, envelopePocket, waxSealBtn], { opacity: 1 })
+        .set(envelopeFlap, { scaleY: 1, y: 0, opacity: 1, zIndex: 10 })
+        .set(waxSealBtn, { scale: 1, rotation: 0 });
+      return;
+    }
+
+    timeline
+      .to(letterContent, {
+        opacity: 0,
+        y: 16,
+        duration: 0.24,
+        stagger: { each: 0.035, from: 'end' },
+        ease: 'power1.in'
+      }, 0)
+      .to(letterPaper, {
+        height: previewHeight,
+        y: -8,
+        scale: 0.99,
+        duration: 0.52,
+        ease: 'power2.inOut'
+      }, 0.18)
+      .to(envelopeSurface, {
+        y: 0,
+        scale: 1,
+        opacity: 1,
+        duration: 0.38,
+        ease: 'power2.out'
+      }, 0.35)
+      .to(envelopePocket, {
+        y: 0,
+        opacity: 1,
+        duration: 0.36,
+        ease: 'power2.out'
+      }, 0.42)
+      .to(letterPaper, {
+        height: 0,
+        y: 72,
+        scale: 0.965,
+        opacity: 0,
+        duration: 0.55,
+        ease: 'power2.in'
+      }, 0.68)
+      .set(envelopeFlap, { zIndex: 10 }, 0.78)
+      .to(envelopeFlap, {
+        scaleY: 1,
+        y: 0,
+        opacity: 1,
+        duration: 0.42,
+        ease: 'power2.out'
+      }, 0.82)
+      .to(waxSealBtn, {
+        opacity: 1,
+        scale: 0.72,
+        rotation: -8,
+        duration: 0.2,
+        ease: 'power1.out'
+      }, 1.14)
+      .to(waxSealBtn, {
+        scale: 1,
+        rotation: 0,
+        duration: 0.3,
+        ease: 'back.out(1.8)'
+      }, 1.28);
   };
 
   waxSealBtn.addEventListener('click', openLetter);
