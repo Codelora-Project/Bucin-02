@@ -4,15 +4,25 @@
 
 .love-envelope-deck {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 28px 24px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 24px;
   margin-top: 48px;
   padding: 8px;
+}
+
+.love-envelope-column {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  min-width: 0;
 }
 
 /* Love Envelope Card */
 .envelope-card {
   position: relative;
+  align-self: start;
+  width: 100%;
   background: linear-gradient(145deg, rgba(255, 245, 248, 0.92) 0%, rgba(252, 236, 242, 0.96) 100%);
   border: 1px solid rgba(245, 203, 203, 0.6);
   border-radius: 20px;
@@ -168,14 +178,19 @@
 /* Mobile Responsiveness */
 @media (max-width: 650px) {
   .love-envelope-deck {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 18px;
+  }
+  .love-envelope-column {
+    display: contents;
   }
   .envelope-card.offset-up,
   .envelope-card.offset-down {
     transform: none;
   }
   .envelope-card {
+    order: var(--reason-order);
     padding: 22px 20px;
   }
   .envelope-title {

@@ -7,6 +7,19 @@ let audioCtrl = null;
 let particleCtrl = null;
 let currentPinInput = '';
 
+/* Always start the surprise from the top instead of restoring an old scroll position. */
+if ('scrollRestoration' in window.history) {
+  window.history.scrollRestoration = 'manual';
+}
+
+function resetPageScroll() {
+  window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  document.documentElement.scrollTop = 0;
+  if (document.body) document.body.scrollTop = 0;
+}
+
+window.addEventListener('pageshow', resetPageScroll);
+
 /* Mobile Haptic Feedback Helper */
 function triggerHaptic(type = 'light') {
   if (!('vibrate' in navigator)) return;
@@ -21,6 +34,8 @@ function triggerHaptic(type = 'light') {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  resetPageScroll();
+
   // Start preloader to cache flower images & gallery assets
   initPreloader();
 
@@ -73,10 +88,10 @@ function initPreloader() {
   if (!loadingOverlay) return;
 
   const flowerAssets = [
-    '/flowers/flower-1.png',
-    '/flowers/flower-2.png',
-    '/flowers/flower-3.png',
-    '/flowers/flower-4.png'
+    '/flowers/flower-1.webp',
+    '/flowers/flower-2.webp',
+    '/flowers/flower-3.webp',
+    '/flowers/flower-4.webp'
   ];
 
   const galleryAssets = (CONFIG.fotoGallery || []).map(item => item.url).filter(Boolean);
@@ -195,6 +210,7 @@ function setupPinGate() {
 
       setTimeout(() => {
         if (pinOverlay) pinOverlay.classList.add('is-hidden');
+        resetPageScroll();
         
         const welcomeGate = document.getElementById('welcome-gate');
         if (welcomeGate) welcomeGate.classList.remove('is-hidden');
@@ -233,10 +249,10 @@ function setupWelcomeGate() {
   
   let isAnimating = false;
   const flowerImages = [
-    "/flowers/flower-1.png",
-    "/flowers/flower-2.png",
-    "/flowers/flower-3.png",
-    "/flowers/flower-4.png"
+    "/flowers/flower-1.webp",
+    "/flowers/flower-2.webp",
+    "/flowers/flower-3.webp",
+    "/flowers/flower-4.webp"
   ];
   const isMobile = window.innerWidth <= 600;
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -280,6 +296,7 @@ function setupWelcomeGate() {
   initialView.addEventListener("click", () => {
     if (isAnimating) return;
     isAnimating = true;
+    resetPageScroll();
     triggerHaptic('success');
     particleCtrl?.pause();
 
@@ -755,10 +772,12 @@ function renderReasons() {
   if (!grid) return;
 
   grid.className = 'love-envelope-deck';
-  grid.innerHTML = CONFIG.alasanCinta.map((reason, idx) => {
+  const reasonColumns = [[], []];
+
+  CONFIG.alasanCinta.forEach((reason, idx) => {
     const offsetClass = idx % 2 === 0 ? 'offset-up' : 'offset-down';
-    return `
-      <div class="envelope-card ${offsetClass} reveal-on-scroll" data-id="${reason.id}">
+    reasonColumns[idx % 2].push(`
+      <div class="envelope-card ${offsetClass} reveal-on-scroll" data-id="${reason.id}" style="--reason-order: ${idx};">
         <div class="envelope-header">
           <div class="envelope-seal">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
@@ -782,8 +801,14 @@ function renderReasons() {
           <p class="envelope-letter-text">${escapeHtml(reason.description)}</p>
         </div>
       </div>
-    `;
-  }).join('');
+    `);
+  });
+
+  grid.innerHTML = reasonColumns.map(column => `
+    <div class="love-envelope-column">
+      ${column.join('')}
+    </div>
+  `).join('');
 }
 
 function setupReasonCards() {
