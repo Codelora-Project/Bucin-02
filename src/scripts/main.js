@@ -279,12 +279,7 @@ function setupWelcomeGate() {
   });
 
   function sizeFlowerCanvas() {
-    const deviceDpr = window.devicePixelRatio || 1;
-    const maxDpr = isMobile
-      ? (hasLimitedHardware ? 1.35 : 1.75)
-      : (hasLimitedHardware ? 1 : 1.35);
-    const dpr = Math.min(deviceDpr, maxDpr);
-
+    const dpr = Math.min(window.devicePixelRatio || 1, hasLimitedHardware ? 1 : 1.35);
     [flowerBackCanvas, flowerFrontCanvas].forEach(canvas => {
       canvas.width = Math.round(window.innerWidth * dpr);
       canvas.height = Math.round(window.innerHeight * dpr);
@@ -293,11 +288,6 @@ function setupWelcomeGate() {
     });
     flowerBackCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
     flowerFrontCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    [flowerBackCtx, flowerFrontCtx].forEach(ctx => {
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-    });
   }
 
   sizeFlowerCanvas();
