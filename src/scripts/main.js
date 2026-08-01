@@ -2,6 +2,11 @@ import { CONFIG } from '../config/content.js';
 import { initParticleEngine, triggerCelebrationBurst, triggerConfettiFireworks } from './particles.js';
 import { AudioController } from './audio.js';
 import { initScrollReveal } from './scrollReveal.js';
+import {
+  FLOWER_ASSETS,
+  createFlowerTransition,
+  preloadFlowerSprite
+} from './flowerTransition.js';
 
 let audioCtrl = null;
 let particleCtrl = null;
@@ -87,15 +92,8 @@ function initPreloader() {
 
   if (!loadingOverlay) return;
 
-  const flowerAssets = [
-    '/flowers/flower-1.webp',
-    '/flowers/flower-2.webp',
-    '/flowers/flower-3.webp',
-    '/flowers/flower-4.webp'
-  ];
-
   const galleryAssets = (CONFIG.fotoGallery || []).map(item => item.url).filter(Boolean);
-  const allAssets = [...flowerAssets, ...galleryAssets];
+  const allAssets = [...FLOWER_ASSETS, ...galleryAssets];
 
   let loadedCount = 0;
   const totalAssets = allAssets.length;
@@ -136,7 +134,11 @@ function initPreloader() {
     }
   };
 
-  allAssets.forEach(src => {
+  FLOWER_ASSETS.forEach(src => {
+    preloadFlowerSprite(src).then(handleAssetLoaded, handleAssetLoaded);
+  });
+
+  galleryAssets.forEach(src => {
     const img = new Image();
     img.onload = handleAssetLoaded;
     img.onerror = handleAssetLoaded; // Ensure app proceeds even if a remote photo fails
@@ -244,53 +246,17 @@ function setupWelcomeGate() {
   const welcomeGate = document.getElementById("welcome-gate");
   const initialView = document.getElementById("initial-view");
   const flowerContainer = document.getElementById("flower-container");
+  const giftBody = initialView?.querySelector('.gift-body');
   
   if (!welcomeGate || !initialView || !flowerContainer) return;
   
   let isAnimating = false;
-  const flowerImages = [
-    "/flowers/flower-1.webp",
-    "/flowers/flower-2.webp",
-    "/flowers/flower-3.webp",
-    "/flowers/flower-4.webp"
-  ];
-  const isMobile = window.innerWidth <= 600;
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const hasLimitedHardware = (navigator.hardwareConcurrency || 4) <= 4 ||
-    (navigator.deviceMemory || 4) <= 4;
-  const TOTAL_FLOWERS = prefersReducedMotion
-    ? 42
-    : hasLimitedHardware
-      ? (isMobile ? 120 : 150)
-      : (isMobile ? 150 : 180);
-
-  // Two canvas layers let some flowers pass behind the box and others cross in front.
-  const flowerBackCanvas = document.createElement('canvas');
-  const flowerFrontCanvas = document.createElement('canvas');
-  flowerBackCanvas.className = 'flower-burst-canvas is-back';
-  flowerFrontCanvas.className = 'flower-burst-canvas is-front';
-  flowerContainer.append(flowerBackCanvas, flowerFrontCanvas);
-  const flowerBackCtx = flowerBackCanvas.getContext('2d', { alpha: true });
-  const flowerFrontCtx = flowerFrontCanvas.getContext('2d', { alpha: true });
-  const flowerSprites = flowerImages.map(src => {
-    const image = new Image();
-    image.src = src;
-    return image;
+  const flowerTransition = createFlowerTransition({
+    container: flowerContainer,
+    reducedMotion: prefersReducedMotion
   });
-
-  function sizeFlowerCanvas() {
-    const dpr = Math.min(window.devicePixelRatio || 1, hasLimitedHardware ? 1 : 1.35);
-    [flowerBackCanvas, flowerFrontCanvas].forEach(canvas => {
-      canvas.width = Math.round(window.innerWidth * dpr);
-      canvas.height = Math.round(window.innerHeight * dpr);
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
-    });
-    flowerBackCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    flowerFrontCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-
-  sizeFlowerCanvas();
+  flowerTransition.prepare();
 
   // Handle Explosion
   initialView.addEventListener("click", () => {
@@ -308,27 +274,21 @@ function setupWelcomeGate() {
     // Keep welcome-gate ON TOP during explosion
     welcomeGate.style.zIndex = '9998';
 
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
     const heroSection = document.querySelector('.hero-section');
     const motionScale = prefersReducedMotion ? 0.55 : 1;
-    const burstStart = 0.38;
-    const shotSpan = prefersReducedMotion ? 0.42 : 2.2;
-    const flowerFlightDuration = prefersReducedMotion ? 0.46 : 0.78;
-    const burstDuration = shotSpan + flowerFlightDuration * 1.12;
-    const coverageTime = burstStart + burstDuration;
-    const fallStart = coverageTime + (prefersReducedMotion ? 0.14 : 0.25);
-    const fallDuration = prefersReducedMotion ? 0.7 : (isMobile ? 2.8 : 3.2);
-    const cleanupTime = fallStart + fallDuration + 0.1;
+    const { burstStart, shotSpan } = flowerTransition.timing;
+    const giftRect = giftBody?.getBoundingClientRect();
+    const originX = giftRect ? giftRect.left + giftRect.width / 2 : window.innerWidth / 2;
+    const originY = giftRect ? giftRect.top + 22 : window.innerHeight / 2 - 48;
 
-    // Timeline GSAP
-    const tl = gsap.timeline();
-
-    // Hero has already been laid out and painted behind the opaque gate.
+    // The hero is fully painted while it is still hidden behind the gate.
+    // At full flower coverage the gate can be removed without animating a full-screen layer.
     if (heroSection) {
-      gsap.set(heroSection, { opacity: 0, y: 18, scale: 0.985, force3D: true });
       heroSection.classList.remove('hero-transition-pending');
+      gsap.set(heroSection, { clearProps: 'opacity,transform' });
     }
+
+    const tl = gsap.timeline();
 
     // 1. Hide hint text instantly upon click
     gsap.set('.gift-hint-text', {
@@ -376,119 +336,22 @@ function setupWelcomeGate() {
       ease: "power2.inOut"
     }, burstStart + shotSpan * 0.65);
 
-    // 5. Build a dense target grid so the rapid-fire volley covers every screen zone.
-    const gridColumns = isMobile ? 6 : 10;
-    const gridRows = isMobile ? 10 : 6;
-    const gridCellCount = gridColumns * gridRows;
-    const cellWidth = viewportWidth / gridColumns;
-    const cellHeight = viewportHeight / gridRows;
-    const cellDiagonal = Math.hypot(cellWidth, cellHeight);
-    const flowerTargets = Array.from({ length: TOTAL_FLOWERS }, (_, index) => {
-      // 37 is coprime to the 60-cell grid, distributing consecutive shots across the screen.
-      const cellIndex = (index * 37) % gridCellCount;
-      const column = cellIndex % gridColumns;
-      const row = Math.floor(cellIndex / gridColumns);
-      const targetX = (column + 0.5) * cellWidth + (Math.random() - 0.5) * cellWidth * 0.52;
-      const targetY = (row + 0.5) * cellHeight + (Math.random() - 0.5) * cellHeight * 0.52;
-      const launchOriginY = viewportHeight / 2 - (isMobile ? 42 : 48);
-
-      return {
-        image: flowerSprites[index % flowerSprites.length],
-        foreground: index % 4 === 0,
-        x: targetX - viewportWidth / 2,
-        y: targetY - launchOriginY,
-        rotation: Math.random() * 180 - 90,
-        size: cellDiagonal * (0.88 + Math.random() * 0.34),
-        scale: 0.88 + Math.random() * 0.28,
-        launchAt: (index / Math.max(1, TOTAL_FLOWERS - 1)) * shotSpan,
-        flightDuration: flowerFlightDuration * (0.88 + Math.random() * 0.24),
-        fallDelay: Math.random() * 0.2,
-        swayAmplitude: Math.random() * (isMobile ? 25 : 40) + (isMobile ? 18 : 28),
-        swayCycles: Math.random() * 0.65 + 1.05,
-        swayDirection: Math.random() > 0.5 ? 1 : -1,
-        fallRotation: Math.random() * 260 - 130
-      };
+    flowerTransition.play({
+      originX,
+      originY,
+      onCovered: () => {
+        welcomeGate.classList.add('is-revealed');
+        initialView.style.display = 'none';
+      },
+      onComplete: () => {
+        flowerTransition.destroy();
+        welcomeGate.classList.add('is-hidden');
+        welcomeGate.style.pointerEvents = "none";
+        document.body.classList.remove('gate-active');
+        particleCtrl?.resume();
+        audioCtrl?.showWidget();
+      }
     });
-
-    const canvasMotion = { burst: 0, fall: 0 };
-    const clamp01 = value => Math.max(0, Math.min(1, value));
-    const easeOutCubic = value => 1 - Math.pow(1 - value, 3);
-
-    function drawFlowerBurst() {
-      flowerBackCtx.clearRect(0, 0, viewportWidth, viewportHeight);
-      flowerFrontCtx.clearRect(0, 0, viewportWidth, viewportHeight);
-      const centerX = viewportWidth / 2;
-      const centerY = viewportHeight / 2 - (isMobile ? 42 : 48);
-
-      flowerTargets.forEach(flower => {
-        if (!flower.image.complete || !flower.image.naturalWidth) return;
-        const localBurst = clamp01(
-          (canvasMotion.burst - flower.launchAt) / flower.flightDuration
-        );
-        if (localBurst <= 0) return;
-        const burstEase = easeOutCubic(localBurst);
-        const localFall = clamp01((canvasMotion.fall - flower.fallDelay) / (1 - flower.fallDelay));
-        const fallEase = localFall * localFall;
-        const swayEnvelope = Math.sin(localFall * Math.PI);
-        const sway = Math.sin(localFall * Math.PI * 2 * flower.swayCycles) *
-          flower.swayAmplitude * flower.swayDirection * swayEnvelope;
-        const x = centerX + flower.x * burstEase + sway;
-        const y = centerY + flower.y * burstEase + (viewportHeight + 260) * fallEase;
-        const rotation = (flower.rotation * burstEase + flower.fallRotation * localFall) * Math.PI / 180;
-        const scale = (0.16 + (flower.scale - 0.16) * burstEase) * (1 - fallEase * 0.08);
-        const opacity = Math.min(1, localBurst * 5) * (1 - fallEase);
-        const drawSize = flower.size * scale;
-
-        const ctx = flower.foreground ? flowerFrontCtx : flowerBackCtx;
-        ctx.save();
-        ctx.globalAlpha = opacity;
-        ctx.translate(x, y);
-        ctx.rotate(rotation);
-        ctx.drawImage(flower.image, -drawSize / 2, -drawSize / 2, drawSize, drawSize);
-        ctx.restore();
-      });
-    }
-
-    tl.to(canvasMotion, {
-      burst: burstDuration,
-      duration: burstDuration,
-      ease: 'none',
-      onUpdate: drawFlowerBurst
-    }, burstStart);
-
-    // 6. Crossfade the hero behind the flower foreground mask.
-    tl.call(() => {
-      welcomeGate.classList.add('is-revealing');
-    }, null, coverageTime);
-
-    if (heroSection) {
-      tl.to(heroSection, {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: prefersReducedMotion ? 0.45 : 0.9,
-        ease: "power3.out"
-      }, coverageTime);
-    }
-
-    // 7. The dense field falls downward with a gentle left-right wind sway.
-    tl.to(canvasMotion, {
-      fall: 1,
-      duration: fallDuration,
-      ease: 'none',
-      onUpdate: drawFlowerBurst
-    }, fallStart);
-
-    // 8. Cleanup quickly so promoted flower layers do not linger in GPU memory.
-    tl.call(() => {
-      welcomeGate.classList.add('is-hidden');
-      welcomeGate.style.pointerEvents = "none";
-      if (initialView) initialView.style.display = "none";
-      flowerContainer.replaceChildren();
-      document.body.classList.remove('gate-active');
-      particleCtrl?.resume();
-      audioCtrl?.showWidget();
-    }, null, cleanupTime);
   });
 }
 
