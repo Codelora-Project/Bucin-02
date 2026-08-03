@@ -88,7 +88,6 @@ function initPreloader() {
   const progressFill = document.getElementById('loading-progress-fill');
   const percentText = document.getElementById('loading-percent-text');
   const statusText = document.getElementById('loading-status-text');
-  const subtitleText = document.getElementById('loading-subtitle');
 
   if (!loadingOverlay) return;
 
@@ -115,20 +114,14 @@ function initPreloader() {
   const handleAssetLoaded = () => {
     loadedCount++;
     const percent = Math.min(100, Math.round((loadedCount / totalAssets) * 100));
-
-    let statusMsg = 'Memuat kelopak bunga... 🌸';
-    if (percent > 40) statusMsg = 'Menyiapkan foto kenangan... 📷';
-    if (percent > 85) statusMsg = 'Hampir selesai... ✨';
-
-    updateProgress(percent, statusMsg);
+    updateProgress(percent);
 
     if (loadedCount >= totalAssets) {
       const elapsedTime = Date.now() - startTime;
       const remainingTime = Math.max(0, MIN_DISPLAY_TIME - elapsedTime);
 
       setTimeout(() => {
-        updateProgress(100, 'Siap! 🎉');
-        if (subtitleText) subtitleText.textContent = 'Semua kejutan sudah siap! ❤️';
+        updateProgress(100, 'Sudah siap.');
         setTimeout(finishLoading, 450);
       }, remainingTime);
     }
